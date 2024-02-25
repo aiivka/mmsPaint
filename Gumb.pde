@@ -2,20 +2,33 @@ class Gumb {
 
   float x = 0, y = 0;
   float w = 50, h = 50;
+  float xPom, yPom;
   float textSize = 12;
   color rectColor = color(185, 59, 59); // red
   color textColor = color(0);
   String text = "";
-  float xPom, yPom;
   String imageName = "";
+   // flag for ie right part of ui
+   // if more buttons are drawn at the same position of the screen,
+   // flag helps detect which button is the one selected
+  boolean isVisible = true;
 
   Gumb(String text_) {
-      text = text_;
-    }
+    text = text_;
+  }
+  Gumb(color rectColor_) {
+    rectColor = rectColor_;
+  }
 
   Gumb(float x_, float y_) {
     x = x_;
     y = y_;
+  }
+  
+  Gumb(float x_, float y_, color rectColor_) {
+    x = x_;
+    y = y_;
+    rectColor = rectColor_;
   }
 
   Gumb(float x_, float y_, String text_) {
@@ -29,6 +42,14 @@ class Gumb {
     y = y_;
     w = w_;
     h = h_;
+  }
+  
+    Gumb(float x_, float y_, float w_, float h_, color rectColor_) {
+    x = x_;
+    y = y_;
+    w = w_;
+    h = h_;
+    rectColor = rectColor_;
   }
   
     Gumb(float x_, float y_, float w_, float h_, String text_) {
@@ -99,5 +120,9 @@ class Gumb {
   void postaviPoziciju(float x, float y){
     this.x = x;
     this.y = y;
+  }
+  
+  void updateVisibility() {
+    isVisible = !isVisible;
   }
 }
