@@ -1,3 +1,7 @@
+import java.utils.*;
+
+ArrayList<PVector> dots = new ArrayList<PVector>();
+
 class pencil {
   
   void pen(int c, int w) {
