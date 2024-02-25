@@ -1,4 +1,4 @@
-import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>//
+import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>//
 import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 
 ControlP5 cp5;
@@ -24,12 +24,14 @@ Gumb he = new Gumb( 70, 90);
 
 Gumb firstChosenColorButton = new Gumb(0, 595, purple);
 Gumb secondChosenColorButton = new Gumb(0, 645, yellow);
+Gumb colorSelection = firstChosenColorButton;
+Gumb pressedToolButton;
 
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
-Grid toolGrid = new Grid(3, 2);
+Grid_ toolGrid = new Grid_(3, 2);
 Gumb[] toolButtons= { new Gumb("Button1"), new Gumb("Button2"), new Gumb("Button3"), help, he };
-Grid colorGrid = new Grid(2, 14); // [2][14]
+Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
@@ -70,14 +72,31 @@ void draw() {
 }
 
 void mouseClicked() {
-  Gumb pressedToolButton = toolGrid.returnPressedButton();
+  if (pressedToolButton != null) {
+    pressedToolButton.unSelectedVisualUpdate();
+  }
+  pressedToolButton = toolGrid.returnPressedButton();
   if( pressedToolButton != null){
+    pressedToolButton.selectedVisualUpdate();
      print("image name: " + pressedToolButton.imageName + "\n");
   }
+  
   Gumb chosenColorButton = colorGrid.returnPressedButton();
   if( chosenColorButton != null){
-     print("position: " + chosenColorButton.x + " " + chosenColorButton.y + "\n");
+    colorSelection.rectColor = chosenColorButton.rectColor;
+    print("position: " + chosenColorButton.x + " " + chosenColorButton.y + "\n");
   }
+  
+  if (firstChosenColorButton.unutar()) {
+    colorSelection.unSelectedVisualUpdate();
+    colorSelection = firstChosenColorButton;
+    colorSelection.selectedVisualUpdate();
+  } else if (secondChosenColorButton.unutar()) {
+    colorSelection.unSelectedVisualUpdate();
+    colorSelection = secondChosenColorButton;
+    colorSelection.selectedVisualUpdate();
+  }
+
   
   if (saveImageButton.unutar()){
     print("saved\n");

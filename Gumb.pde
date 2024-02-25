@@ -7,6 +7,8 @@ class Gumb {
   color rectColor = color(185, 59, 59); // red
   color textColor = color(0);
   String text = "";
+  int lineWidth = 1;
+  int lineColor = 0;
   String imageName = "";
    // flag for ie right part of ui
    // if more buttons are drawn at the same position of the screen,
@@ -63,6 +65,8 @@ class Gumb {
   // Crtaj na početnim koordinatama
   void nacrtajGumb() {
     fill(rectColor);
+    strokeWeight(lineWidth);
+    stroke(lineColor);
     rect(x, y, w, h);
     fill(color(0)); // defaultna boja teksta
     textAlign(CENTER, CENTER);
@@ -124,5 +128,21 @@ class Gumb {
   
   void updateVisibility() {
     isVisible = !isVisible;
+  }
+  
+  void selectedVisualUpdate() {
+    lineWidth = 4;
+    w -= lineWidth;
+    x += (lineWidth + 1)/2;
+    h -= lineWidth;
+    y += (lineWidth + 1)/2;
+  }
+  
+  void unSelectedVisualUpdate() {
+    w += lineWidth;
+    x -= (lineWidth + 1)/2;
+    h += lineWidth;
+    y -= (lineWidth + 1)/2;
+    lineWidth = 1;
   }
 }
