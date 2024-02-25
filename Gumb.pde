@@ -9,6 +9,7 @@ class Gumb {
   String text = "";
   int lineWidth = 1;
   int lineColor = 0;
+  String name = "";
   String imageName = "";
    // flag for ie right part of ui
    // if more buttons are drawn at the same position of the screen,
@@ -17,6 +18,7 @@ class Gumb {
 
   Gumb(String text_) {
     text = text_;
+    name = text;
   }
   Gumb(color rectColor_) {
     rectColor = rectColor_;

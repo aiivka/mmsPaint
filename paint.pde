@@ -1,7 +1,8 @@
-import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>//
+import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>// //<>//
 import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 
 ControlP5 cp5;
+Pencil pencil = new Pencil();
 
 PGraphics helpScreen;
 boolean isTyping = false;
@@ -69,6 +70,8 @@ void draw() {
       
     cp5.get(Textfield.class,"generate").hide();
   }
+  
+  useSelectedTool();
 }
 
 void mouseClicked() {
@@ -107,7 +110,21 @@ void mouseClicked() {
     isSaveVisible = false;
     saveImageButton.updateVisibility();
   }
-  
+}
+
+void useSelectedTool() {
+  if (pressedToolButton == null) return;
+  String tool = pressedToolButton.name;
+  switch (tool) {
+    case "gradientPen":
+      pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor);
+      break;
+    case "magicPen":
+      pencil.magicPen(3);
+      break;
+    default:
+      break;
+  }
 }
 
 void keyPressed() {
