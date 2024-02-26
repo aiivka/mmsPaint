@@ -31,17 +31,24 @@ Gumb pressedToolButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { new Gumb("Button1"), new Gumb("Button2"), new Gumb("Button3"), help, he };
+Gumb[] toolButtons= { new Gumb("eraser"), new Gumb("Button2"), new Gumb("Button3"), help, he };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple)};
+
+class DrawArea {
+  int sizeX = 750, sizeY = 450;
+  int left = 105, right = 105 + sizeX, up = 100, down = 100 + sizeY;
+}
+
+DrawArea area = new DrawArea();
  
 void setup() {
     size(1050, 750);
-    rect(105, 100, 750, 450); // white space for drawing
+    rect(area.left, area.up, area.sizeX, area.sizeY); // white space for drawing
     help.dodajSliku("candy.png");
     
     toolGrid.addButtons(toolButtons, 0, 0, 50, 50);
@@ -52,6 +59,7 @@ void setup() {
     
     setupSaveImageTextfield();
     saveTimeStop = millis();
+    colorSelection.selectedVisualUpdate();
 }
 
 void draw() {
@@ -75,13 +83,15 @@ void draw() {
 }
 
 void mouseClicked() {
-  if (pressedToolButton != null) {
-    pressedToolButton.unSelectedVisualUpdate();
-  }
-  pressedToolButton = toolGrid.returnPressedButton();
-  if( pressedToolButton != null){
-    pressedToolButton.selectedVisualUpdate();
-     print("image name: " + pressedToolButton.imageName + "\n");
+  if (toolGrid.returnPressedButton() != null) {
+    if (pressedToolButton != null) {
+      pressedToolButton.unSelectedVisualUpdate();
+    }
+    pressedToolButton = toolGrid.returnPressedButton();
+    if( pressedToolButton != null){
+      pressedToolButton.selectedVisualUpdate();
+       print("image name: " + pressedToolButton.imageName + "\n");
+    }
   }
   
   Gumb chosenColorButton = colorGrid.returnPressedButton();
@@ -117,11 +127,16 @@ void useSelectedTool() {
   String tool = pressedToolButton.name;
   switch (tool) {
     case "gradientPen":
-      pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor);
+      pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor, area);
       break;
     case "magicPen":
-      pencil.magicPen(3);
+      pencil.magicPen(3, area);
       break;
+    case "pen":
+      pencil.pen(firstChosenColorButton.rectColor, 3, area);
+      break;
+    case "eraser":
+      pencil.eraser(secondChosenColorButton.rectColor, 3, area);
     default:
       break;
   }
@@ -135,7 +150,6 @@ void keyPressed() {
     //generatedImageTextfield.hide();
     //cp5.get(Textfield.class,"generate").hide();
     //saveImageButton.isVisible = true;
- 
   }
   // h - help  
   // s - save
