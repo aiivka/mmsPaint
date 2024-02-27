@@ -3,19 +3,41 @@ class Can {
     if (mousePressed) {
       loadPixels();
       color currentColor = pixels[mouseY * width + mouseX];
-      coloring(c, currentColor, int(mouseX), int(mouseY), area);
+      int xMouse = int(mouseX), yMouse = int(mouseY), originalMouseX = int(mouseX), originalMouseY = int(mouseY);
+      while (pixels[yMouse * width + xMouse] == currentColor && yMouse < area.down) {
+        coloringL(c, currentColor, xMouse, yMouse, area);
+        yMouse++;
+      }
+      yMouse = originalMouseY - 1;
+      while (pixels[yMouse * width + xMouse] == currentColor && yMouse > area.up) {
+        coloringL(c, currentColor, xMouse, yMouse, area);
+        yMouse--;
+      }
+      yMouse = originalMouseY; xMouse = originalMouseX + 1;
+      while (pixels[yMouse * width + xMouse] == currentColor && yMouse < area.down) {
+        coloringR(c, currentColor, xMouse, yMouse, area);
+        yMouse++;
+      }
+      yMouse = originalMouseY - 1; xMouse = originalMouseX + 1;
+      while (pixels[yMouse * width + xMouse] == currentColor && yMouse > area.up) {
+        coloringR(c, currentColor, xMouse, yMouse, area);
+        yMouse--;
+      }
       updatePixels();
     }
   }
   
-  void coloring(color c, color currentColor, int xMouse, int yMouse, DrawArea area) {
-    return;
-    /*if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
+  void coloringL(color c, color currentColor, int xMouse, int yMouse, DrawArea area) {
+    if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
     if (currentColor != pixels[yMouse * width + xMouse]) return;
     pixels[yMouse * width + xMouse] = c;
-    coloring(c, currentColor, xMouse - 1, yMouse, area);
-    coloring(c, currentColor, xMouse, yMouse - 1, area);
-    coloring(c, currentColor, xMouse + 1, yMouse, area);
-    coloring(c, currentColor, xMouse, yMouse + 1, area);*/
+    coloringL(c, currentColor, xMouse - 1, yMouse, area);
+  }
+  
+  void coloringR(color c, color currentColor, int xMouse, int yMouse, DrawArea area) {
+    if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
+    if (currentColor != pixels[yMouse * width + xMouse]) return;
+    pixels[yMouse * width + xMouse] = c;
+    coloringR(c, currentColor, xMouse + 1, yMouse, area);
   }
 }
