@@ -9,22 +9,13 @@ class Can {
   }
   
   void coloring(color c, color currentColor, int xMouse, int yMouse, DrawArea area) {
-    if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
+    return;
+    /*if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
     if (currentColor != pixels[yMouse * width + xMouse]) return;
     pixels[yMouse * width + xMouse] = c;
     coloring(c, currentColor, xMouse - 1, yMouse, area);
     coloring(c, currentColor, xMouse, yMouse - 1, area);
     coloring(c, currentColor, xMouse + 1, yMouse, area);
-    coloring(c, currentColor, xMouse, yMouse + 1, area);
-  }
-  
-    void coloring(color c, color currentColor, int xMouse, int yMouse, DrawArea area) {
-    if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
-    if (currentColor != pixels[yMouse * width + xMouse]) return;
-    pixels[yMouse * width + xMouse] = c;
-    coloring(c, currentColor, xMouse - 1, yMouse, area);
-    coloring(c, currentColor, xMouse, yMouse - 1, area);
-    coloring(c, currentColor, xMouse + 1, yMouse, area);
-    coloring(c, currentColor, xMouse, yMouse + 1, area);
+    coloring(c, currentColor, xMouse, yMouse + 1, area);*/
   }
 }
