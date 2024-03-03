@@ -9,16 +9,26 @@ class Oblici{
   int mouseHeld = 0;
   String shape;
   
-  ArrayList<float[]> pravokutnici = new ArrayList<float[]>(); 
+  // svaki u posebnoj listi radi moguce undo implementacije
+  
+  // svi oblici
+  ArrayList<float[]> pravokutnici = new ArrayList<float[]>();
   ArrayList<float[]> krugovi = new ArrayList<float[]>(); 
-  ArrayList<float[]> srca = new ArrayList<float[]>(); 
+  ArrayList<float[]> srca = new ArrayList<float[]>();
   ArrayList<float[]> zvijezde = new ArrayList<float[]>();
   ArrayList<float[]> trokuti = new ArrayList<float[]>();
   ArrayList<float[]> rombovi = new ArrayList<float[]>();
   ArrayList<float[]> linije = new ArrayList<float[]>();
   ArrayList<float[]> peterokuti = new ArrayList<float[]>();
-  ArrayList<float[]> Zvijezdice = new ArrayList<float[]>();
-  ArrayList<float[]> maleZvijezdice = new ArrayList<float[]>();
+  ArrayList<float[]> Zvijezdice = new ArrayList<float[]>();     // visekrake
+  ArrayList<float[]> maleZvijezdice = new ArrayList<float[]>(); // cetverokrake
+  ArrayList<float[]> obliPravokutnici = new ArrayList<float[]>();
+  ArrayList<float[]> streliceL = new ArrayList<float[]>();   // left
+  ArrayList<float[]> streliceR = new ArrayList<float[]>();   // rigth
+  ArrayList<float[]> streliceU = new ArrayList<float[]>();   // up
+  ArrayList<float[]> streliceD = new ArrayList<float[]>();   // down
+  
+  
   
   Oblici(){
   }
@@ -36,6 +46,10 @@ class Oblici{
     if (oblikCrtaj == "Rectangle"){
     float[] p = pravokutnici.get(pravokutnici.size() - 1);
     rect(p[0],p[1],p[2],p[3]); // x, y, sirina, visina
+    }
+    if (oblikCrtaj == "OvalRect"){
+    float[] o = obliPravokutnici.get(obliPravokutnici.size() - 1);
+    rect(o[0],o[1],o[2],o[3], o[4]); // x, y, sirina, visina, zaoblj
     }
     if (oblikCrtaj == "Circle"){
     float[] k = krugovi.get(krugovi.size() - 1);
@@ -72,6 +86,22 @@ class Oblici{
     if (oblikCrtaj == "SmallStar"){
     float[] m = maleZvijezdice.get(maleZvijezdice.size() - 1);
     nacrtajMaluZvijezdu(m[0], m[1], m[2], m[3]); // x, y, r1, r2
+    }
+    if (oblikCrtaj == "ArrowL"){
+    float[] s = streliceL.get(streliceL.size() - 1);
+    nacrtajStrelicuL(s[0], s[1], s[2], s[3]);
+    }
+    if (oblikCrtaj == "ArrowR"){
+    float[] s = streliceR.get(streliceR.size() - 1);
+    nacrtajStrelicuR(s[0], s[1], s[2], s[3]); 
+    }
+    if (oblikCrtaj == "ArrowU"){
+    float[] s = streliceU.get(streliceU.size() - 1);
+    nacrtajStrelicuU(s[0], s[1], s[2], s[3]); 
+    }
+    if (oblikCrtaj == "ArrowD"){
+    float[] s = streliceD.get(streliceD.size() - 1);
+    nacrtajStrelicuD(s[0], s[1], s[2], s[3]);
     }
     
   }
@@ -128,9 +158,33 @@ class Oblici{
         float a[] = { centarX, centarY, R1,R2};
         maleZvijezdice.add(a);
   }
+        if( mouseHeld == 2  && shape == "OvalRect"){
+        mouseHeld = 0;
+        float a[] = { startX, startY, endX, endY, 20 };
+        obliPravokutnici.add(a);
+  }
+        if( mouseHeld == 2  && shape == "ArrowL"){
+        mouseHeld = 0;
+        float a[] = { startX, startY, endX + startX, endY + startY };
+        streliceL.add(a);
+  }
+        if( mouseHeld == 2  && shape == "ArrowR"){
+        mouseHeld = 0;
+        float a[] = { startX, startY, endX + startX, endY + startY };
+        streliceR.add(a);
+  }
+        if( mouseHeld == 2  && shape == "ArrowU"){
+        mouseHeld = 0;
+        float a[] = { startX, startY, endX + startX, endY + startY};
+        streliceU.add(a);
+  }
+        if( mouseHeld == 2  && shape == "ArrowD"){
+        mouseHeld = 0;
+        float a[] = { startX, startY, endX + startX, endY + startY};
+        streliceD.add(a);
+  }
  }
-   void nacrtajSrce(float a, float b, float c)
-  {
+   void nacrtajSrce(float a, float b, float c){
     //Lijeva strana srca
     beginShape();
     vertex(a, b + c / 4);
@@ -144,15 +198,14 @@ class Oblici{
     endShape();
   }
   
-  void nacrtajZvijezdu(float cx, float cy, float R)
-  {
+  void nacrtajZvijezdu(float cx, float cy, float R){
       int numPoints = 5; // Broj vrhova zvijezde
       float angle = TWO_PI / numPoints; // Kut između svakog vrha
       
       beginShape();
       for (int i = 0; i < numPoints * 2; i++) {
         float r = (i % 2 == 0) ? R * 0.5 : R; // Odabir vanjskog ili unutarnjeg radijusa
-        float x = cx + cos(angle * i - HALF_PI) * r; // X koordinata vrha
+        float x = cx + cos(angle* i - HALF_PI) * r; // X koordinata vrha
         float y = cy + sin(angle * i - HALF_PI) * r; // Y koordinata vrha
         vertex(x, y); // Dodavanje vrha u oblik
         i++;
@@ -160,8 +213,7 @@ class Oblici{
       endShape(CLOSE);
   }
   
-  void nacrtajPeterokut(float cx, float cy, float radius)
-  {
+  void nacrtajPeterokut(float cx, float cy, float radius){
       int numPoints = 5; 
       beginShape();
       for (int i = 0; i < numPoints; i++) {
@@ -173,8 +225,7 @@ class Oblici{
       endShape(CLOSE);
   }
   
-  void nacrtajZvijezdicu(float x, float y, float  w, float h)
-  {
+  void nacrtajZvijezdicu(float x, float y, float  w, float h){
       float cx = x + w / 2;;
       float cy = y + h /2;
       float outerRadius = min( w/2, h/2);
@@ -195,17 +246,61 @@ class Oblici{
       endShape(CLOSE);
   }
  
-  void nacrtajMaluZvijezdu(float Cx, float Cy, float rO, float rI)
-  {
-
-  beginShape();
-  for (int i = 0; i < 8; i++) {
-    float angle = TWO_PI / 8 * i + PI / 8; // Kut između svake točke
-    float x = Cx + cos(angle) * ((i % 2 == 0) ? rO: rI); // X koordinata vrha
-    float y = Cy + sin(angle) * ((i % 2 == 0) ? rO : rI); // Y koordinata vrha
-    vertex(x, y); // Dodavanje vrha u oblik
+  void nacrtajMaluZvijezdu(float Cx, float Cy, float rO, float rI){
+      beginShape();
+      for (int i = 0; i < 8; i++) {
+        float angle = TWO_PI / 8 * i + PI / 8; // Kut između svake točke
+        float x = Cx + cos(angle+60) * ((i % 2 == 0) ? rO: rI); // X koordinata vrha
+        float y = Cy + sin(angle+60) * ((i % 2 == 0) ? rO : rI); // Y koordinata vrha
+        vertex(x, y); // Dodavanje vrha u oblik
+      }
+      endShape(CLOSE);
   }
-  endShape(CLOSE);
+  
+  void nacrtajStrelicuR(float x, float y, float z, float w){       
+      float x1 = x + (z-x)/2; // X koordinata lijevog vrha trokuta
+      float y1 = y; // Y koordinata lijevog vrha trokuta
+      float x2 = x + (z-x)/2; // X koordinata desnog vrha trokuta
+      float y2 = w; // Y koordinata desnog vrha trokuta
+      float x3 = z; // X koordinata vrha trokuta
+      float y3 = y + (w-y)/2; // Y koordinata vrha trokuta 
+     
+      triangle(x1, y1, x2, y2, x3, y3);
+      rect(x, y + (w-y)/4, (z-x)/2, (w-y)/2);
+  }
+  
+  void nacrtajStrelicuL(float x, float y, float z, float w){
+      float x1 = x + (z-x)/2; // X koordinata lijevog vrha trokuta
+      float y1 = w; // Y koordinata lijevog vrha trokuta
+      float x2 = x + (z-x)/2; // X koordinata desnog vrha trokuta
+      float y2 = y; // Y koordinata desnog vrha trokuta
+      float x3 = x; // X koordinata vrha trokuta
+      float y3 = y + (w-y)/2; // Y koordinata vrha trokuta 
+     
+      triangle(x1, y1, x2, y2, x3, y3);
+      rect(x + (z-x)/2, y + (w-y)/4, (z-x)/2, (w-y)/2);
+  }
+  void nacrtajStrelicuU(float x, float y, float z, float w){
+      float x1 = x; // X koordinata lijevog vrha trokuta
+      float y1 = y + (w-y)/2; // Y koordinata lijevog vrha trokuta
+      float x2 = z; // X koordinata desnog vrha trokuta
+      float y2 = y + (w-y)/2; // Y koordinata desnog vrha trokuta
+      float x3 = x + (z-x)/2; // X koordinata vrha trokuta
+      float y3 = y; // Y koordinata vrha trokuta 
+     
+      triangle(x1, y1, x2, y2, x3, y3);
+      rect(x+ (z-x)/4, y+ (w-y)/2, (z-x)/2, (w-y)/2);
+  }    
+  void nacrtajStrelicuD(float x, float y, float z, float w){
+      float x1 = x; // X koordinata lijevog vrha trokuta
+      float y1 = y + (w-y)/2; // Y koordinata lijevog vrha trokuta
+      float x2 = z; // X koordinata desnog vrha trokuta
+      float y2 = y + (w-y)/2; // Y koordinata desnog vrha trokuta
+      float x3 = x + (z-x)/2; // X koordinata vrha trokuta
+      float y3 = w; // Y koordinata vrha trokuta 
+     
+      triangle(x1, y1, x2, y2, x3, y3);
+      rect(x+ (z-x)/4, y, (z-x)/2, (w-y)/2);
   }
   
     
@@ -216,6 +311,7 @@ class Oblici{
   startY = mouseY;
   mouseHeld = 1;
 }
+
 void mouseReleased() {
   
   // ----------------- za pravokutnik -------------------------------------

@@ -51,7 +51,8 @@ new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30
 Grid_ shapeGrid = new Grid_(5, 3);
 Gumb[] shapeButtons = { new Gumb("Line", darkRed), new Gumb("Circle", darkRed),new Gumb("Rectangle", darkRed), new Gumb("Star", darkRed),
                         new Gumb("Heart", darkRed), new Gumb("Triangle", darkRed), new Gumb("Rhombus", darkRed), new Gumb("Pentagon",darkRed),
-                        new Gumb("MultiStar", darkRed),new Gumb("SmallStar", darkRed)
+                        new Gumb("MultiStar", darkRed), new Gumb("SmallStar", darkRed),  new Gumb("OvalRect", darkRed), new Gumb("ArrowL", darkRed), 
+                        new Gumb("ArrowR", darkRed), new Gumb("ArrowU", darkRed), new Gumb("ArrowD", darkRed),
                       };
 
 
