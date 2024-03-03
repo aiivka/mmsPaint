@@ -4,7 +4,10 @@ import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 ControlP5 cp5;
 Pencil pencil = new Pencil();
 Can can = new Can();
+<<<<<<< HEAD
+=======
 Oblici oblici = new Oblici();
+>>>>>>> a64543e1754702883e837488a8fb3da92e6741d5
 
 PGraphics helpScreen;
 boolean isTyping = false;
@@ -28,6 +31,9 @@ color green = color (0,128,0);
 color turquoise = color( 173,234,234);
 color marine = color(30, 203, 225);
 color purple = color(58, 39, 216);
+<<<<<<< HEAD
+color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
+=======
 color white = color (255, 255, 255);
 color lightGrey = color(205,201,201);
 color brown = color(139,101,8);
@@ -37,6 +43,7 @@ color gold = color(255,215,0);
 color beige = color(255,246,143);
 color lime = color(0,255,0);
 
+>>>>>>> a64543e1754702883e837488a8fb3da92e6741d5
 
 Gumb help = new Gumb( 50, 30);
 Gumb he = new Gumb( 70, 90);
@@ -50,7 +57,11 @@ Gumb pressedShapeButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
+<<<<<<< HEAD
+Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he };
+=======
 Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes", darkRed) };
+>>>>>>> a64543e1754702883e837488a8fb3da92e6741d5
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, black), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
 new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, turquoise), 
@@ -86,6 +97,30 @@ void setup() {
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
     
+    cp5.addSlider("red")
+     .setPosition(550, 600)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(red(colorRect))
+     .setColorForeground(color(200, 0, 100));
+  
+  cp5.addSlider("green")
+     .setPosition(550, 650)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(green(colorRect))
+     .setColorForeground(color(100, 200, 0));
+  
+  cp5.addSlider("blue")
+     .setPosition(550, 700)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(blue(colorRect))
+     .setColorForeground(color(0, 100, 200));
+    
     setupSaveImageTextfield();
     saveTimeStop = millis();
     colorSelection.selectedVisualUpdate();
@@ -110,6 +145,10 @@ void draw() {
     cp5.get(Textfield.class,"generate").hide();
   }
   
+  colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
+  fill(colorRect);
+  rect(800, 610, 100, 100);
+    
   useSelectedTool();
 }
 
@@ -125,6 +164,10 @@ void mouseClicked() {
     }
   }
   
+<<<<<<< HEAD
+  if (mouseY > 610 && mouseY < 710 && mouseX > 800 && mouseX < 900) {
+    colorSelection.rectColor = colorRect;
+=======
     if (shapeGrid.returnPressedButton() != null) {
     if (pressedShapeButton != null) {
       pressedShapeButton.unSelectedVisualUpdate();
@@ -134,6 +177,7 @@ void mouseClicked() {
       pressedShapeButton.selectedVisualUpdate();
        print("image name: " + pressedShapeButton.imageName + "\n");
     }
+>>>>>>> a64543e1754702883e837488a8fb3da92e6741d5
   }
   
   Gumb chosenColorButton = colorGrid.returnPressedButton();
@@ -186,9 +230,12 @@ void useSelectedTool() {
       pencil.eraser(secondChosenColorButton.rectColor, 3, area);
     case "can":
       can.colorCan(firstChosenColorButton.rectColor, area);
+<<<<<<< HEAD
+=======
     case "shapes":
       oblici.drawShape(firstChosenColorButton.rectColor,Shape, area);
       break;
+>>>>>>> a64543e1754702883e837488a8fb3da92e6741d5
     default:
       break;
   }
