@@ -18,13 +18,24 @@ Textfield generatedImageTextfield;
 boolean isSaveVisible = false;
 int saveTimeStart, saveTimeStop = millis();
 
-color yellow = color(255, 255, 153);
-color white = color (255, 255, 255);
+color black = color(0,0,0);
+color grey = color (190,190,190);
+color darkRed = color(140, 59, 59);
 color red = color(185, 59, 59);
+color orange = color (255,165,0);
+color yellow = color(255, 255, 0);
+color green = color (0,128,0);
+color turquoise = color( 173,234,234);
 color marine = color(30, 203, 225);
 color purple = color(58, 39, 216);
-
-color darkRed = color(140, 59, 59);
+color white = color (255, 255, 255);
+color lightGrey = color(205,201,201);
+color brown = color(139,101,8);
+color copper = color(133,99,99);
+color spicyPink = color(255,28,174);
+color gold = color(255,215,0);
+color beige = color(255,246,143);
+color lime = color(0,255,0);
 
 
 Gumb help = new Gumb( 50, 30);
@@ -41,11 +52,11 @@ Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 Grid_ toolGrid = new Grid_(3, 2);
 Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes", darkRed) };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
-Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
-new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
-new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
-new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
-new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple)};
+Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, black), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
+new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, turquoise), 
+new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), new Gumb(30, 30, 30, 30, white), new Gumb(30, 30, 30, 30, lightGrey),
+new Gumb(30, 30, 30, 30, brown), new Gumb(30, 30, 30, 30, spicyPink), new Gumb(30, 30, 30, 30, gold), new Gumb(30, 30, 30, 30, beige),
+new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple)};
 
 //--------------
 Grid_ shapeGrid = new Grid_(5, 3);
