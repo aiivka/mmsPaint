@@ -4,6 +4,7 @@ import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 ControlP5 cp5;
 Pencil pencil = new Pencil();
 Can can = new Can();
+Oblici oblici = new Oblici();
 
 PGraphics helpScreen;
 boolean isTyping = false;
@@ -28,17 +29,23 @@ Gumb firstChosenColorButton = new Gumb(0, 595, purple);
 Gumb secondChosenColorButton = new Gumb(0, 645, yellow);
 Gumb colorSelection = firstChosenColorButton;
 Gumb pressedToolButton;
+Gumb pressedShapeButton;
 
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he };
+Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes") };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple),
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple)};
+
+//--------------
+Grid_ shapeGrid = new Grid_(5, 3);
+Gumb[] shapeButtons = { new Gumb("line"), new Gumb("Circle"),new Gumb("square"), new Gumb("star"), };
+
 
 class DrawArea {
   int sizeX = 750, sizeY = 450;
@@ -54,6 +61,7 @@ void setup() {
     
     toolGrid.addButtons(toolButtons, 0, 0, 50, 50);
     colorGrid.addButtons(colorButtons, 50, 605, 30, 30);
+    shapeGrid.addButtons(shapeButtons, 870, 100, 50, 50);
     
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
@@ -66,6 +74,7 @@ void setup() {
 void draw() {
   toolGrid.drawGrid();
   colorGrid.drawGrid();
+  shapeGrid.drawGrid();
   
   firstChosenColorButton.nacrtajGumb();
   secondChosenColorButton.nacrtajGumb();
@@ -92,6 +101,17 @@ void mouseClicked() {
     if( pressedToolButton != null){
       pressedToolButton.selectedVisualUpdate();
        print("image name: " + pressedToolButton.imageName + "\n");
+    }
+  }
+  
+    if (shapeGrid.returnPressedButton() != null) {
+    if (pressedShapeButton != null) {
+      pressedShapeButton.unSelectedVisualUpdate();
+    }
+    pressedShapeButton = shapeGrid.returnPressedButton();
+    if( pressedShapeButton != null){
+      pressedShapeButton.selectedVisualUpdate();
+       print("image name: " + pressedShapeButton.imageName + "\n");
     }
   }
   
@@ -140,10 +160,14 @@ void useSelectedTool() {
       pencil.eraser(secondChosenColorButton.rectColor, 3, area);
     case "can":
       can.colorCan(firstChosenColorButton.rectColor, area);
+    case "shapes":
+        oblici.iscrtaj(firstChosenColorButton.rectColor, area);
+        break;
     default:
       break;
   }
 }
+
 
 void keyPressed() {
   if ((key == 's' || key == 'S' )) { // && !isTyping) {
