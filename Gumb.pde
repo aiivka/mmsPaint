@@ -20,6 +20,11 @@ class Gumb {
     text = text_;
     name = text;
   }
+  Gumb (String text_, color c){
+    text = text_;
+    name = text;
+    rectColor = c;
+  }
   Gumb(color rectColor_) {
     rectColor = rectColor_;
   }

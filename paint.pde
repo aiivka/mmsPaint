@@ -8,6 +8,9 @@ Oblici oblici = new Oblici();
 
 PGraphics helpScreen;
 boolean isTyping = false;
+boolean Shapes= false;
+
+String tool;
 
 PFont font;
 int numGenImages = 0;
@@ -20,6 +23,8 @@ color white = color (255, 255, 255);
 color red = color(185, 59, 59);
 color marine = color(30, 203, 225);
 color purple = color(58, 39, 216);
+
+color darkRed = color(140, 59, 59);
 
 
 Gumb help = new Gumb( 50, 30);
@@ -34,7 +39,7 @@ Gumb pressedShapeButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes") };
+Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes", darkRed) };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
@@ -44,7 +49,10 @@ new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30
 
 //--------------
 Grid_ shapeGrid = new Grid_(5, 3);
-Gumb[] shapeButtons = { new Gumb("line"), new Gumb("Circle"),new Gumb("square"), new Gumb("star"), };
+Gumb[] shapeButtons = { new Gumb("Line", darkRed), new Gumb("Circle", darkRed),new Gumb("Rectangle", darkRed), new Gumb("Star", darkRed),
+                        new Gumb("Heart", darkRed), new Gumb("Triangle", darkRed), new Gumb("Rhombus", darkRed), new Gumb("Pentagon",darkRed),
+                        new Gumb("MultiStar", darkRed),new Gumb("SmallStar", darkRed)
+                      };
 
 
 class DrawArea {
@@ -75,6 +83,7 @@ void draw() {
   toolGrid.drawGrid();
   colorGrid.drawGrid();
   shapeGrid.drawGrid();
+
   
   firstChosenColorButton.nacrtajGumb();
   secondChosenColorButton.nacrtajGumb();
@@ -146,6 +155,11 @@ void mouseClicked() {
 void useSelectedTool() {
   if (pressedToolButton == null) return;
   String tool = pressedToolButton.name;
+
+  if (pressedShapeButton == null) return;
+  String Shape = pressedShapeButton.name;
+  
+  
   switch (tool) {
     case "gradientPen":
       pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor, area);
@@ -161,8 +175,8 @@ void useSelectedTool() {
     case "can":
       can.colorCan(firstChosenColorButton.rectColor, area);
     case "shapes":
-        oblici.iscrtaj(firstChosenColorButton.rectColor, area);
-        break;
+      oblici.drawShape(firstChosenColorButton.rectColor,Shape, area);
+      break;
     default:
       break;
   }
