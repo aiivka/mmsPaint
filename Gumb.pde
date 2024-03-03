@@ -120,8 +120,8 @@ class Gumb {
 
    void nacrtajSliku() {
     PImage img = loadImage(imageName);
-    img.resize(20, 20);
-    image(img, x + w/2 - 10, y + h/2 - 10);
+    img.resize(50, 50);
+    image(img, x , y );
   }
   
   void dodajSliku(String slika){

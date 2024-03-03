@@ -8,7 +8,7 @@ Oblici oblici = new Oblici();
 
 PGraphics helpScreen;
 boolean isTyping = false;
-boolean Shapes= false;
+boolean isShape = false;
 
 String tool;
 
@@ -26,8 +26,10 @@ color orange = color (255,165,0);
 color yellow = color(255, 255, 0);
 color green = color (0,128,0);
 color turquoise = color( 173,234,234);
+color steelBlue = color(35,107,142);
 color marine = color(30, 203, 225);
-color purple = color(58, 39, 216);
+color blue = color(58, 39, 216);
+color darkPurple = color(85,26,139);
 color white = color (255, 255, 255);
 color lightGrey = color(205,201,201);
 color brown = color(139,101,8);
@@ -36,13 +38,23 @@ color spicyPink = color(255,28,174);
 color gold = color(255,215,0);
 color beige = color(255,246,143);
 color lime = color(0,255,0);
+color violet = color(238,130,238);
+color redRed = color(255,0,0);
+color mistyRose = color(255,228,225);
+color hotPink = color(255,105,180);
+color coral = color(255,114,86);
+color peachPuff = color(255,218,185);
+color springGreen = color(0,255,127);
+color stateBlue = color(131,111,255);
+
+Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
 
 
 Gumb help = new Gumb( 50, 30);
 Gumb he = new Gumb( 70, 90);
 
-Gumb firstChosenColorButton = new Gumb(0, 595, purple);
-Gumb secondChosenColorButton = new Gumb(0, 645, yellow);
+Gumb firstChosenColorButton = new Gumb(0, 595, black);
+Gumb secondChosenColorButton = new Gumb(0, 645, white);
 Gumb colorSelection = firstChosenColorButton;
 Gumb pressedToolButton;
 Gumb pressedShapeButton;
@@ -52,18 +64,20 @@ Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 Grid_ toolGrid = new Grid_(3, 2);
 Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes", darkRed) };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
-Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, black), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
-new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, turquoise), 
-new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), new Gumb(30, 30, 30, 30, white), new Gumb(30, 30, 30, 30, lightGrey),
+Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
+new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, turquoise), 
+new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, blue), new Gumb(30, 30, 30, 30, white),new Gumb(30, 30, 30, 30, black), new Gumb(30, 30, 30, 30, lightGrey),
 new Gumb(30, 30, 30, 30, brown), new Gumb(30, 30, 30, 30, spicyPink), new Gumb(30, 30, 30, 30, gold), new Gumb(30, 30, 30, 30, beige),
-new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple)};
+new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 30, 30, 30, steelBlue), new Gumb(30, 30, 30, 30, violet),
+new Gumb(30, 30, 30, 30, redRed), new Gumb(30, 30, 30, 30, mistyRose), new Gumb(30, 30, 30, 30, hotPink), new Gumb(30, 30, 30, 30, coral),
+new Gumb(30, 30, 30, 30, peachPuff), new Gumb(30, 30, 30, 30, springGreen), new Gumb(30, 30, 30, 30, stateBlue),new Gumb(30, 30, 30, 30, darkPurple),};
 
 //--------------
 Grid_ shapeGrid = new Grid_(5, 3);
-Gumb[] shapeButtons = { new Gumb("Line", darkRed), new Gumb("Circle", darkRed),new Gumb("Rectangle", darkRed), new Gumb("Star", darkRed),
-                        new Gumb("Heart", darkRed), new Gumb("Triangle", darkRed), new Gumb("Rhombus", darkRed), new Gumb("Pentagon",darkRed),
-                        new Gumb("MultiStar", darkRed), new Gumb("SmallStar", darkRed),  new Gumb("OvalRect", darkRed), new Gumb("ArrowL", darkRed), 
-                        new Gumb("ArrowR", darkRed), new Gumb("ArrowU", darkRed), new Gumb("ArrowD", darkRed),
+Gumb[] shapeButtons = { b1 = new Gumb("Line", darkRed), b2 = new Gumb("Circle", darkRed), b3 = new Gumb("Rectangle", darkRed), b4 = new Gumb("Star", darkRed),
+                        b5 = new Gumb("Heart", darkRed), b6 = new Gumb("Triangle", darkRed), b7 = new Gumb("Rhombus", darkRed), b8 = new Gumb("Pentagon",darkRed),
+                        b9 = new Gumb("MultiStar", darkRed), b10 = new Gumb("SmallStar", darkRed), b11=  new Gumb("OvalRect", darkRed), b12 = new Gumb("ArrowL", darkRed), 
+                        b13 = new Gumb("ArrowR", darkRed), b14 = new Gumb("ArrowU", darkRed), b15 = new Gumb("ArrowD", darkRed)
                       };
 
 
@@ -89,12 +103,31 @@ void setup() {
     setupSaveImageTextfield();
     saveTimeStop = millis();
     colorSelection.selectedVisualUpdate();
+    
+    b1.dodajSliku ("line.png");         b9.dodajSliku("multiStar.png");
+    b2.dodajSliku("circle.png");        b10.dodajSliku("smallStar.png");
+    b3.dodajSliku("rectangle.png");     b11.dodajSliku("ovalRect.png");
+    b4.dodajSliku("star.png");          b12.dodajSliku("arrowL.png");
+    b5.dodajSliku("heart.png");         b13.dodajSliku("arrowR.png");
+    b6.dodajSliku("triangle.png");      b14.dodajSliku("arrowU.png");
+    b7.dodajSliku("rhombus.png");       b15.dodajSliku("arrowD.png");
+    b8.dodajSliku("pentagon.png");
 }
 
 void draw() {
+  color pozadina = color(203,203,204);
+  
   toolGrid.drawGrid();
   colorGrid.drawGrid();
-  shapeGrid.drawGrid();
+  
+  if (isShape)
+    shapeGrid.drawGrid();
+  else
+  {
+    fill(pozadina);
+    stroke(pozadina);
+    rect(870, 100, 200,300);
+  }
 
   
   firstChosenColorButton.nacrtajGumb();
@@ -111,6 +144,7 @@ void draw() {
   }
   
   useSelectedTool();
+  useSelectedShape();
 }
 
 void mouseClicked() {
@@ -167,11 +201,7 @@ void mouseClicked() {
 void useSelectedTool() {
   if (pressedToolButton == null) return;
   String tool = pressedToolButton.name;
-
-  if (pressedShapeButton == null) return;
-  String Shape = pressedShapeButton.name;
-  
-  
+  isShape = false;
   switch (tool) {
     case "gradientPen":
       pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor, area);
@@ -187,12 +217,24 @@ void useSelectedTool() {
     case "can":
       can.colorCan(firstChosenColorButton.rectColor, area);
     case "shapes":
-      oblici.drawShape(firstChosenColorButton.rectColor,Shape, area);
-      break;
+      isShape = true;
     default:
       break;
   }
 }
+
+void useSelectedShape(){
+  
+  if (pressedShapeButton == null) return;
+  String Shape = pressedShapeButton.name;
+  if (pressedToolButton == null) return;
+  String tool = pressedToolButton.name;
+  if(isShape && tool == "shapes")
+  {
+      oblici.drawShape(firstChosenColorButton.rectColor,Shape, area);
+  }
+}
+
 
 
 void keyPressed() {
