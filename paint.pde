@@ -3,6 +3,7 @@ import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 
 ControlP5 cp5;
 Pencil pencil = new Pencil();
+Can can = new Can();
 
 PGraphics helpScreen;
 boolean isTyping = false;
@@ -31,7 +32,7 @@ Gumb pressedToolButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { new Gumb("eraser"), new Gumb("Button2"), new Gumb("Button3"), help, he };
+Gumb[] toolButtons= { new Gumb("eraser"), new Gumb("can"), new Gumb("photo"), help, he };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
 new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, red), new Gumb(30, 30, 30, 30, marine), new Gumb(30, 30, 30, 30, purple), 
@@ -45,6 +46,24 @@ class DrawArea {
 }
 
 DrawArea area = new DrawArea();
+
+ // .svg slike 
+Grid_ photoGrid = new Grid_(2, 2);
+Gumb houseButton = new Gumb("House");
+Gumb carButton = new Gumb("Car");
+Gumb butterflyButton = new Gumb("Butterfly");
+Gumb catButton = new Gumb("Cat");
+Gumb[] PhotoArray = {houseButton, carButton, butterflyButton,catButton };
+PShape house;
+PShape car;
+PShape butterfly;
+PShape cat;
+boolean photoSelected = false; 
+boolean houseSelected = false;
+boolean carSelected = false;
+boolean butterflySelected=false;
+boolean catSelected=false;
+
  
 void setup() {
     size(1050, 750);
@@ -53,6 +72,7 @@ void setup() {
     
     toolGrid.addButtons(toolButtons, 0, 0, 50, 50);
     colorGrid.addButtons(colorButtons, 50, 605, 30, 30);
+    photoGrid.addButtons(PhotoArray,900, 100, 50, 50 );
     
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
@@ -60,6 +80,11 @@ void setup() {
     setupSaveImageTextfield();
     saveTimeStop = millis();
     colorSelection.selectedVisualUpdate();
+    
+    house=loadShape("kuca.svg");
+    car=loadShape("car.svg");
+    butterfly=loadShape("butterfly.svg");
+    cat=loadShape("cat.svg");
 }
 
 void draw() {
@@ -77,6 +102,28 @@ void draw() {
     }
       
     cp5.get(Textfield.class,"generate").hide();
+  }
+  
+  if(photoSelected)
+ {
+     photoGrid.drawGrid();
+  }
+  if( (mousePressed && houseButton.unutar()) || houseSelected){
+    houseSelected=true; 
+    shape(house, 110, -100);
+    
+    }
+  if( (mousePressed && carButton.unutar()) || carSelected){
+    carSelected=true; 
+    shape(car, 50, -250);
+  }
+  if( (mousePressed && butterflyButton.unutar()) || butterflySelected){
+    butterflySelected=true; 
+    shape(butterfly, -350, -500);
+  }
+  if( (mousePressed && catButton.unutar()) || catSelected){
+    catSelected=true; 
+    shape(cat, -100, -100);
   }
   
   useSelectedTool();
@@ -137,6 +184,11 @@ void useSelectedTool() {
       break;
     case "eraser":
       pencil.eraser(secondChosenColorButton.rectColor, 3, area);
+    case "can":
+      can.colorCan(firstChosenColorButton.rectColor, area);
+    case "photo":
+      photoSelected=true;
+      
     default:
       break;
   }
