@@ -3,8 +3,9 @@ class Gumb {
   float x = 0, y = 0;
   float w = 50, h = 50;
   float xPom, yPom;
-  float textSize = 12;
-  color rectColor = color(185, 59, 59); // red
+  float textSize = 8;
+  color rectColor = color(190,190,190); // grey
+  //color rectColor = color(185, 59, 59); // red
   color textColor = color(0);
   String text = "";
   int lineWidth = 1;
@@ -76,6 +77,7 @@ class Gumb {
     stroke(lineColor);
     rect(x, y, w, h);
     fill(color(0)); // defaultna boja teksta
+    fill(color(190,190,190));
     textAlign(CENTER, CENTER);
     textSize(textSize);
     text(text, x + w / 2, y + h / 2);

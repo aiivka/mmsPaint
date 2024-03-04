@@ -54,6 +54,7 @@ color springGreen = color(0,255,127);
 color stateBlue = color(131,111,255);
 
 Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
+Gumb p1, p2, p3, p4, p5, p6;
 
 Gumb help = new Gumb( 50, 30);
 Gumb he = new Gumb( 70, 90);
@@ -67,7 +68,7 @@ Gumb pressedShapeButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { new Gumb("pen"), new Gumb("magicPen"), new Gumb("can"), help, he ,new Gumb("shapes", darkRed) };
+Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p3 = new Gumb("can"), p4 = help, p5 = he , p6 = new Gumb("shapes", grey) };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
 new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, turquoise), 
@@ -79,10 +80,10 @@ new Gumb(30, 30, 30, 30, peachPuff), new Gumb(30, 30, 30, 30, springGreen), new 
 
 //--------------
 Grid_ shapeGrid = new Grid_(5, 3);
-Gumb[] shapeButtons = { b1 = new Gumb("Line", darkRed), b2 = new Gumb("Circle", darkRed), b3 = new Gumb("Rectangle", darkRed), b4 = new Gumb("Star", darkRed),
-                        b5 = new Gumb("Heart", darkRed), b6 = new Gumb("Triangle", darkRed), b7 = new Gumb("Rhombus", darkRed), b8 = new Gumb("Pentagon",darkRed),
-                        b9 = new Gumb("MultiStar", darkRed), b10 = new Gumb("SmallStar", darkRed), b11=  new Gumb("OvalRect", darkRed), b12 = new Gumb("ArrowL", darkRed), 
-                        b13 = new Gumb("ArrowR", darkRed), b14 = new Gumb("ArrowU", darkRed), b15 = new Gumb("ArrowD", darkRed)
+Gumb[] shapeButtons = { b1 = new Gumb("Line", grey), b2 = new Gumb("Circle", grey), b3 = new Gumb("Rectangle", grey), b4 = new Gumb("Star", grey),
+                        b5 = new Gumb("Heart", grey), b6 = new Gumb("Triangle", grey), b7 = new Gumb("Rhombus", grey), b8 = new Gumb("Pentagon",grey),
+                        b9 = new Gumb("MultiStar", grey), b10 = new Gumb("SmallStar", grey), b11=  new Gumb("OvalRect", grey), b12 = new Gumb("ArrowL", grey), 
+                        b13 = new Gumb("ArrowR", grey), b14 = new Gumb("ArrowU", grey), b15 = new Gumb("ArrowD", grey)
                       };
 
 
@@ -141,6 +142,13 @@ void setup() {
     b6.dodajSliku("triangle.png");      b14.dodajSliku("arrowU.png");
     b7.dodajSliku("rhombus.png");       b15.dodajSliku("arrowD.png");
     b8.dodajSliku("pentagon.png");
+    
+    p1.dodajSliku("pen.png");
+    p2.dodajSliku("magicPen.png");
+    p3.dodajSliku("bucket.png");
+    //p4.dodajSliku();
+    //p5.dodajSliku();
+    p6.dodajSliku("shapes.png");
 }
 
 void draw() {
@@ -252,6 +260,7 @@ void useSelectedTool() {
       pencil.eraser(secondChosenColorButton.rectColor, 3, area);
     case "can":
       can.colorCan(firstChosenColorButton.rectColor, area);
+      break;
     case "shapes":
       isShape = true;
     default:
