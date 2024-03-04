@@ -1,4 +1,4 @@
-import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>// //<>//
+import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>// //<>// //<>//
 import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 
 ControlP5 cp5;
@@ -28,8 +28,14 @@ color green = color (0,128,0);
 color turquoise = color( 173,234,234);
 color steelBlue = color(35,107,142);
 color marine = color(30, 203, 225);
+
 color blue = color(58, 39, 216);
 color darkPurple = color(85,26,139);
+
+color purple = color(58, 39, 216);
+
+color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
+
 color white = color (255, 255, 255);
 color lightGrey = color(205,201,201);
 color brown = color(139,101,8);
@@ -48,7 +54,6 @@ color springGreen = color(0,255,127);
 color stateBlue = color(131,111,255);
 
 Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
-
 
 Gumb help = new Gumb( 50, 30);
 Gumb he = new Gumb( 70, 90);
@@ -100,6 +105,30 @@ void setup() {
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
     
+    cp5.addSlider("red")
+     .setPosition(550, 600)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(red(colorRect))
+     .setColorForeground(color(200, 0, 100));
+  
+  cp5.addSlider("green")
+     .setPosition(550, 650)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(green(colorRect))
+     .setColorForeground(color(100, 200, 0));
+  
+  cp5.addSlider("blue")
+     .setPosition(550, 700)
+     .setWidth(200)
+     .setHeight(20)
+     .setRange(0, 255)
+     .setValue(blue(colorRect))
+     .setColorForeground(color(0, 100, 200));
+    
     setupSaveImageTextfield();
     saveTimeStop = millis();
     colorSelection.selectedVisualUpdate();
@@ -143,6 +172,10 @@ void draw() {
     cp5.get(Textfield.class,"generate").hide();
   }
   
+  colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
+  fill(colorRect);
+  rect(800, 610, 100, 100);
+    
   useSelectedTool();
   useSelectedShape();
 }
@@ -159,7 +192,10 @@ void mouseClicked() {
     }
   }
   
-    if (shapeGrid.returnPressedButton() != null) {
+  if (mouseY > 610 && mouseY < 710 && mouseX > 800 && mouseX < 900) {
+    colorSelection.rectColor = colorRect;
+  }
+  if (shapeGrid.returnPressedButton() != null) {
     if (pressedShapeButton != null) {
       pressedShapeButton.unSelectedVisualUpdate();
     }
