@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+
 class Oblici{
   float startX, startY, endX, endY;
   float udalj, srceSize, udaljX, udaljY, R1, R2, pocX, pocY;
   float Radijus, PRadius, centarX, centarY, uX, uY, w, h;
   float X1, X2, X3, Y1, Y2, Y3;
   float RX1, RX2, RX3, RX4, RY1, RY2, RY3, RY4;
+  
   
   int mouseHeld = 0;
   String shape;
@@ -32,82 +34,85 @@ class Oblici{
   
   Oblici(){
   }
+ 
+
   
   void drawShape( color boja, String oblikCrtaj, DrawArea area)
-  {
-    int xMouse = int(mouseX), yMouse = int(mouseY);
-    if (yMouse > area.down || yMouse < area.up || xMouse > area.right || xMouse < area.left) return;
-    
+  {    
     shape = oblikCrtaj;
     dodajOblik();
     fill(255);  // koje boje?
     stroke(boja);     strokeWeight(2); 
     
-    if (oblikCrtaj == "Rectangle"){
+    if (oblikCrtaj == "Rectangle" && !pravokutnici.isEmpty()){
     float[] p = pravokutnici.get(pravokutnici.size() - 1);
     rect(p[0],p[1],p[2],p[3]); // x, y, sirina, visina
     }
-    if (oblikCrtaj == "OvalRect"){
+    if (oblikCrtaj == "OvalRect" && !obliPravokutnici.isEmpty()){
     float[] o = obliPravokutnici.get(obliPravokutnici.size() - 1);
     rect(o[0],o[1],o[2],o[3], o[4]); // x, y, sirina, visina, zaoblj
     }
-    if (oblikCrtaj == "Circle"){
+    if (oblikCrtaj == "Circle" && !krugovi.isEmpty()){
     float[] k = krugovi.get(krugovi.size() - 1);
     circle(k[0], k[1], k[2]);  // x, y, r
     }
-    if (oblikCrtaj == "Heart"){
+    if (oblikCrtaj == "Heart" && !srca.isEmpty()){
     float[] s = srca.get(srca.size() - 1);
     nacrtajSrce(s[0], s[1], s[2]);  // x, y, d
     }
-    if (oblikCrtaj == "Star"){
+    if (oblikCrtaj == "Star" && !zvijezde.isEmpty()){
     float[] z = zvijezde.get(zvijezde.size() - 1);
     nacrtajZvijezdu(z[0], z[1], z[2]);  // x, y, c
     }
-    if (oblikCrtaj == "Triangle"){
+    if (oblikCrtaj == "Triangle" && !trokuti.isEmpty()){
     float[] t = trokuti.get(trokuti.size() - 1);
     triangle(t[0], t[1], t[2], t[3], t[4], t[5]);  // x1, y1, x2, y2, x3, y3
     }
-    if (oblikCrtaj == "Rhombus"){
+    if (oblikCrtaj == "Rhombus" && !rombovi.isEmpty()){
     float[] r = rombovi.get(rombovi.size() - 1);
     quad(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]);  // x1, y1, x2, y2, x3, y3, x4, y4
     }
-    if (oblikCrtaj == "Line"){
+    if (oblikCrtaj == "Line" && !linije.isEmpty()){
     float[] l = linije.get(linije.size() - 1);
     line(l[0], l[1], l[2], l[3]); // x1, y1, x2, y2
     }
-    if (oblikCrtaj == "Pentagon"){
+    if (oblikCrtaj == "Pentagon" && !peterokuti.isEmpty()){
     float[] p = peterokuti.get(peterokuti.size() - 1);
     nacrtajPeterokut(p[0], p[1], p[2]); // x1, y1, r
     }
-    if (oblikCrtaj == "MultiStar"){
+    if (oblikCrtaj == "MultiStar" && !Zvijezdice.isEmpty()){
     float[] c = Zvijezdice.get(Zvijezdice.size() - 1);
     nacrtajZvijezdicu(c[0], c[1], c[2], c[3]); // x1, y1, r
     }
-    if (oblikCrtaj == "SmallStar"){
-    float[] m = maleZvijezdice.get(maleZvijezdice.size() - 1);
-    nacrtajMaluZvijezdu(m[0], m[1], m[2], m[3]); // x, y, r1, r2
+    if (oblikCrtaj == "SmallStar" && !maleZvijezdice.isEmpty()){
+      float[] m = maleZvijezdice.get(maleZvijezdice.size() - 1);
+      nacrtajMaluZvijezdu(m[0], m[1], m[2], m[3]); // x, y, r1, r2
+
     }
-    if (oblikCrtaj == "ArrowL"){
+    if (oblikCrtaj == "ArrowL" && !streliceL.isEmpty()){
     float[] s = streliceL.get(streliceL.size() - 1);
     nacrtajStrelicuL(s[0], s[1], s[2], s[3]);
     }
-    if (oblikCrtaj == "ArrowR"){
+    if (oblikCrtaj == "ArrowR" && !streliceR.isEmpty()){
     float[] s = streliceR.get(streliceR.size() - 1);
-    nacrtajStrelicuR(s[0], s[1], s[2], s[3]); 
+    nacrtajStrelicuR(s[0], s[1], s[2], s[3]);
     }
-    if (oblikCrtaj == "ArrowU"){
+    if (oblikCrtaj == "ArrowU" && !streliceU.isEmpty()){
     float[] s = streliceU.get(streliceU.size() - 1);
     nacrtajStrelicuU(s[0], s[1], s[2], s[3]); 
     }
-    if (oblikCrtaj == "ArrowD"){
+    if (oblikCrtaj == "ArrowD" && !streliceD.isEmpty()){
     float[] s = streliceD.get(streliceD.size() - 1);
     nacrtajStrelicuD(s[0], s[1], s[2], s[3]);
     }
     
+    obrubi();
+    return;
+    
   }
 
   void dodajOblik() {
-    
+    if (startX < area.left || startX > area.right || startY < area.up || startY > area.down) return;
       if( mouseHeld == 2  && shape == "Rectangle"){
         mouseHeld = 0;
         float a[] = {startX, startY, endX, endY};
@@ -183,6 +188,7 @@ class Oblici{
         float a[] = { startX, startY, endX + startX, endY + startY};
         streliceD.add(a);
   }
+  return;
  }
    void nacrtajSrce(float a, float b, float c){
     //Lijeva strana srca
@@ -370,4 +376,38 @@ void mousePressed() {
 
 void mouseReleased() {
   oblici.mouseReleased();
+}
+
+void obrubi(){
+  
+  //------ siva pozadina iscrtavanje nakon svakog oblika ------
+  color pozadina = color(203,203,204);
+  stroke(pozadina);
+  fill(pozadina);
+  rect(0, 0, 1050, area.up-2); // gornji
+  rect(0, 0, area.left-2, 750 -100); // lijevo
+  rect(0, 750 - 198, 1050, 750 -198); // donji
+  rect(1050 -193 , 0, 1050 - 200, 750); // desno
+  
+  //------------------------- redraw ---------------------------
+    shapeGrid.drawGrid();
+    toolGrid.drawGrid();
+    colorGrid.drawGrid();
+    firstChosenColorButton.nacrtajGumb();
+    secondChosenColorButton.nacrtajGumb();
+    
+      if (isSaveVisible ){
+    Text nameGenImage = new Text(600, 600, "Unesite ime generirane slike");
+    nameGenImage.ispisiText();
+    if (saveImageButton.isVisible) {
+      saveImageButton.nacrtajGumb();
+    }
+      
+    cp5.get(Textfield.class,"generate").hide();
+  }
+  
+  colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
+  fill(colorRect);
+  rect(800, 610, 100, 100);
+ //----------------------------------------------------------------------------
 }

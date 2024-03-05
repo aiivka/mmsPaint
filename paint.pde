@@ -18,46 +18,33 @@ Textfield generatedImageTextfield;
 boolean isSaveVisible = false;
 int saveTimeStart, saveTimeStop = millis();
 
-color black = color(0,0,0);
-color grey = color (190,190,190);
-color greyD = color (200,199,201);
-color darkRed = color(140, 59, 59);
-color red = color(185, 59, 59);
-color orange = color (255,165,0);
-color yellow = color(255, 255, 0);
-color green = color (0,128,0);
-color turquoise = color( 173,234,234);
-color steelBlue = color(35,107,142);
-color marine = color(30, 203, 225);
 
-color blue = color(58, 39, 216);
-color darkPurple = color(85,26,139);
+// ------------boje -------------
 
-color purple = color(58, 39, 216);
+color black = color(0,0,0);              color grey = color (190,190,190);
+color greyD = color (200,199,201);       color darkRed = color(140, 59, 59);
+color red = color(185, 59, 59);          color orange = color (255,165,0);
+color yellow = color(255, 255, 0);       color green = color (0,128,0);
+color turquoise = color( 173,234,234);   color steelBlue = color(35,107,142);
+color marine = color(30, 203, 225);      color blue = color(58, 39, 216);
+color darkPurple = color(85,26,139);     color purple = color(58, 39, 216);
+color white = color (255, 255, 255);     color lightGrey = color(205,201,201);
+color brown = color(139,101,8);          color copper = color(133,99,99);
+color spicyPink = color(255,28,174);     color gold = color(255,215,0);
+color beige = color(255,246,143);        color lime = color(0,255,0);
+color violet = color(238,130,238);       color redRed = color(255,0,0);
+color mistyRose = color(255,228,225);    color hotPink = color(255,105,180);
+color coral = color(255,114,86);         color peachPuff = color(255,218,185);
+color springGreen = color(0,255,127);    color stateBlue = color(131,111,255);
+
+//---------------------------------
 
 color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
 
-color white = color (255, 255, 255);
-color lightGrey = color(205,201,201);
-color brown = color(139,101,8);
-color copper = color(133,99,99);
-color spicyPink = color(255,28,174);
-color gold = color(255,215,0);
-color beige = color(255,246,143);
-color lime = color(0,255,0);
-color violet = color(238,130,238);
-color redRed = color(255,0,0);
-color mistyRose = color(255,228,225);
-color hotPink = color(255,105,180);
-color coral = color(255,114,86);
-color peachPuff = color(255,218,185);
-color springGreen = color(0,255,127);
-color stateBlue = color(131,111,255);
-
 Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
-Gumb p1, p2, p3, p4, p5, p6;
+Gumb p1, p2, p3, p4, p5, p6, p7, p8;
 
-Gumb help = new Gumb( 50, 30);
+
 Gumb he = new Gumb( 70, 90);
 
 Gumb firstChosenColorButton = new Gumb(0, 595, black);
@@ -68,8 +55,10 @@ Gumb pressedShapeButton;
 
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
-Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p3 = new Gumb("can"), p4 = help, p5 = he , p6 = new Gumb("shapes") };
+Grid_ toolGrid = new Grid_(4, 2);
+Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = he,p3 = new Gumb("can"), 
+                      p6 = new Gumb("gradientPen"), p7 = new Gumb("eraser"), p4 = new Gumb("shapes"), p8 = new Gumb("slike") };
+
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
 new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, turquoise), 
@@ -79,7 +68,6 @@ new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 3
 new Gumb(30, 30, 30, 30, redRed), new Gumb(30, 30, 30, 30, mistyRose), new Gumb(30, 30, 30, 30, hotPink), new Gumb(30, 30, 30, 30, coral),
 new Gumb(30, 30, 30, 30, peachPuff), new Gumb(30, 30, 30, 30, springGreen), new Gumb(30, 30, 30, 30, stateBlue),new Gumb(30, 30, 30, 30, darkPurple),};
 
-//--------------
 Grid_ shapeGrid = new Grid_(5, 3);
 Gumb[] shapeButtons = { b1 = new Gumb("Line", grey), b2 = new Gumb("Circle", grey), b3 = new Gumb("Rectangle", grey), b4 = new Gumb("Star", grey),
                         b5 = new Gumb("Heart", grey), b6 = new Gumb("Triangle", grey), b7 = new Gumb("Rhombus", grey), b8 = new Gumb("Pentagon",grey),
@@ -98,7 +86,6 @@ DrawArea area = new DrawArea();
 void setup() {
     size(1050, 750);
     rect(area.left, area.up, area.sizeX, area.sizeY); // white space for drawing
-    help.dodajSliku("candy.png");
     
     toolGrid.addButtons(toolButtons, 0, 0, 50, 50);
     colorGrid.addButtons(colorButtons, 50, 605, 30, 30);
@@ -147,14 +134,16 @@ void setup() {
     p1.dodajSliku("pen.png");
     p2.dodajSliku("magicPen.png");
     p3.dodajSliku("bucket.png");
-    //p4.dodajSliku();
-    //p5.dodajSliku();
-    p6.dodajSliku("shapes.png");
+    p4.dodajSliku("shapes.png");
+    p5.dodajSliku("text.png");
+    p6.dodajSliku("gradientPen.png");
+    p7.dodajSliku("eraser.png");
+    p8.dodajSliku("picture.png");
 }
 
 void draw() {
   color pozadina = color(203,203,204);
-  
+
   toolGrid.drawGrid();
   colorGrid.drawGrid();
   
@@ -187,6 +176,7 @@ void draw() {
     
   useSelectedTool();
   useSelectedShape();
+  
 }
 
 void mouseClicked() {
