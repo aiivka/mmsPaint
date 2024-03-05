@@ -20,6 +20,7 @@ int saveTimeStart, saveTimeStop = millis();
 
 color black = color(0,0,0);
 color grey = color (190,190,190);
+color greyD = color (200,199,201);
 color darkRed = color(140, 59, 59);
 color red = color(185, 59, 59);
 color orange = color (255,165,0);
@@ -68,7 +69,7 @@ Gumb pressedShapeButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(3, 2);
-Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p3 = new Gumb("can"), p4 = help, p5 = he , p6 = new Gumb("shapes", grey) };
+Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p3 = new Gumb("can"), p4 = help, p5 = he , p6 = new Gumb("shapes") };
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
 new Gumb(30, 30, 30, 30, orange), new Gumb(30, 30, 30, 30, yellow), new Gumb(30, 30, 30, 30, turquoise), 
