@@ -6,6 +6,7 @@ ControlP5 cp5;
 Pencil pencil = new Pencil();
 Can can = new Can();
 Oblici oblici = new Oblici();
+TextBlob textBlob = new TextBlob();
 
 PGraphics helpScreen;
 boolean isTyping = false, isShape = false;
@@ -43,7 +44,8 @@ color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
 
 Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15; // shapeButtons
 Gumb p1, p2, p3, p4, p5, p6, p7, p8; // toolButtons
-
+Gumb s1, s2, s3; //sizeButtons
+Gumb f1, f2, f3; //fontButtons
 
 Gumb he = new Gumb( 70, 90);
 Gumb help = new Gumb(70,90); //
@@ -53,11 +55,13 @@ Gumb secondChosenColorButton = new Gumb(0, 645, white);
 Gumb colorSelection = firstChosenColorButton;
 Gumb pressedToolButton;
 Gumb pressedShapeButton;
+Gumb pressedSizeButton;
+Gumb pressedFontButton;
 
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(5, 2);
-Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = he, p3 = new Gumb("can"),
+Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = new Gumb("text"), p3 = new Gumb("can"),
                       p6 = new Gumb("gradientPen"), p7 = new Gumb("eraser"), p4 = new Gumb("shapes"), p8 = new Gumb("photo") };
 
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
@@ -68,6 +72,13 @@ new Gumb(30, 30, 30, 30, brown), new Gumb(30, 30, 30, 30, spicyPink), new Gumb(3
 new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 30, 30, 30, steelBlue), new Gumb(30, 30, 30, 30, violet),
 new Gumb(30, 30, 30, 30, redRed), new Gumb(30, 30, 30, 30, mistyRose), new Gumb(30, 30, 30, 30, hotPink), new Gumb(30, 30, 30, 30, coral),
 new Gumb(30, 30, 30, 30, peachPuff), new Gumb(30, 30, 30, 30, springGreen), new Gumb(30, 30, 30, 30, stateBlue),new Gumb(30, 30, 30, 30, darkPurple),};
+
+
+Grid_ sizeGrid = new Grid_(1, 3);
+Gumb[] sizeButtons = {s1= new Gumb("small", grey), s2= new Gumb("medium", grey), s3=new Gumb("large", grey)};
+
+Grid_ fontGrid = new Grid_(1, 3);
+Gumb[] fontButtons ={f1 = new Gumb("Impact", grey), f2= new Gumb("Courier New", grey), f3= new Gumb("Brush Script MT", grey)};
 
 Grid_ shapeGrid = new Grid_(2, 8);
 Gumb[] shapeButtons = { b1 = new Gumb("Line", grey), b2 = new Gumb("Circle", grey), b3 = new Gumb("Rectangle", grey), b4 = new Gumb("Star", grey),
@@ -107,6 +118,8 @@ void setup() {
     colorGrid.addButtons(colorButtons, 50, 605, 30, 30);
     photoGrid.addButtons(photoButtons,900, 100, 50, 50 );
     shapeGrid.addButtons(shapeButtons, 200, 5, 45, 45);
+    sizeGrid.addButtons(sizeButtons, 50, 680, 95, 50);
+    fontGrid.addButtons(fontButtons, 620, 20, 95, 115);
     
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
@@ -170,6 +183,17 @@ void setup() {
    carButton.dodajSliku("cat.png");
    butterflyButton.dodajSliku("butterfly.png");
    catButton.dodajSliku("cat.png");
+ 
+ //---------size button pictures----------------------------
+   s1.dodajSliku("s.png");
+   s2.dodajSliku("m.png");
+   s3.dodajSliku("l.png");
+ 
+ //---------font button pictures-------------------------
+   f1.dodajSliku("impact.png");
+   f2.dodajSliku("courier.png");
+   f3.dodajSliku("brush.png");
+
 
 }
 
@@ -178,6 +202,8 @@ void draw() {
 
   toolGrid.drawGrid();
   colorGrid.drawGrid();
+  sizeGrid.drawGrid();
+  fontGrid.drawGrid();
   
   // ---- shape grid ( show/hide )---
   if (isShape)
@@ -248,6 +274,28 @@ void mouseClicked() {
     }
   }
   
+  if (sizeGrid.returnPressedButton() != null) {
+    if (pressedSizeButton != null) {
+      pressedSizeButton.unSelectedVisualUpdate();
+    }
+    pressedSizeButton = sizeGrid.returnPressedButton();
+    if ( pressedSizeButton != null) {
+      pressedSizeButton.selectedVisualUpdate();
+      print("image name: " + pressedSizeButton.imageName + "\n");
+    }
+  }
+
+  if (fontGrid.returnPressedButton() != null) {
+    if (pressedFontButton != null) {
+      pressedFontButton.unSelectedVisualUpdate();
+    }
+    pressedFontButton = fontGrid.returnPressedButton();
+    if ( pressedFontButton != null) {
+      pressedFontButton.selectedVisualUpdate();
+      print("image name: " + pressedFontButton.imageName + "\n");
+    }
+  }
+  
   if (mouseY > 610 && mouseY < 710 && mouseX > 800 && mouseX < 900) {
     colorSelection.rectColor = colorRect;
   }
@@ -290,8 +338,17 @@ void mouseClicked() {
 }
 
 void useSelectedTool() {
+  String velicina, font;
   if (pressedToolButton == null) return;
   String tool = pressedToolButton.name;
+  if (pressedSizeButton!=null) {
+    velicina = pressedSizeButton.name;
+  }
+  else velicina = "small";
+  if (pressedFontButton!=null) {
+    font = pressedFontButton.name;
+  }    
+  else font="Arial";
   isShape = false;
   photoSelected = false;
   switch (tool) {
@@ -314,6 +371,8 @@ void useSelectedTool() {
       break;
     case "shapes":
       isShape = true;
+    case "text":
+      textBlob.tBlob(firstChosenColorButton.rectColor, velicina, font, area);
     default:
       break;
   }
