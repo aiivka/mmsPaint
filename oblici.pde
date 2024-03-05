@@ -7,11 +7,8 @@ class Oblici{
   float X1, X2, X3, Y1, Y2, Y3;
   float RX1, RX2, RX3, RX4, RY1, RY2, RY3, RY4;
   
-  
   int mouseHeld = 0;
   String shape;
-  
-  // svaki u posebnoj listi radi moguce undo implementacije
   
   // svi oblici
   ArrayList<float[]> pravokutnici = new ArrayList<float[]>();
@@ -30,166 +27,168 @@ class Oblici{
   ArrayList<float[]> streliceU = new ArrayList<float[]>();   // up
   ArrayList<float[]> streliceD = new ArrayList<float[]>();   // down
   
-  
-  
   Oblici(){
   }
- 
-
-  
-  void drawShape( color boja, String oblikCrtaj, DrawArea area)
-  {    
+   
+ //-------- crtanje zadnje dodanog oblika -----------------------------
+  void drawShape( color boja, String oblikCrtaj){    
     shape = oblikCrtaj;
     dodajOblik();
     fill(255);  // koje boje?
-    stroke(boja);     strokeWeight(2); 
+    stroke(boja);     
+    strokeWeight(2); 
     
     if (oblikCrtaj == "Rectangle" && !pravokutnici.isEmpty()){
-    float[] p = pravokutnici.get(pravokutnici.size() - 1);
-    rect(p[0],p[1],p[2],p[3]); // x, y, sirina, visina
+      float[] p = pravokutnici.get(pravokutnici.size() - 1);
+      rect(p[0],p[1],p[2],p[3]); // x, y, sirina, visina
     }
     if (oblikCrtaj == "OvalRect" && !obliPravokutnici.isEmpty()){
-    float[] o = obliPravokutnici.get(obliPravokutnici.size() - 1);
-    rect(o[0],o[1],o[2],o[3], o[4]); // x, y, sirina, visina, zaoblj
+      float[] o = obliPravokutnici.get(obliPravokutnici.size() - 1);
+      rect(o[0],o[1],o[2],o[3], o[4]); // x, y, sirina, visina, zaoblj
     }
     if (oblikCrtaj == "Circle" && !krugovi.isEmpty()){
-    float[] k = krugovi.get(krugovi.size() - 1);
-    circle(k[0], k[1], k[2]);  // x, y, r
+      float[] k = krugovi.get(krugovi.size() - 1);
+      circle(k[0], k[1], k[2]);  // x, y, r
     }
     if (oblikCrtaj == "Heart" && !srca.isEmpty()){
-    float[] s = srca.get(srca.size() - 1);
-    nacrtajSrce(s[0], s[1], s[2]);  // x, y, d
+      float[] s = srca.get(srca.size() - 1);
+      nacrtajSrce(s[0], s[1], s[2]);  // x, y, d
     }
     if (oblikCrtaj == "Star" && !zvijezde.isEmpty()){
-    float[] z = zvijezde.get(zvijezde.size() - 1);
-    nacrtajZvijezdu(z[0], z[1], z[2]);  // x, y, c
+      float[] z = zvijezde.get(zvijezde.size() - 1);
+      nacrtajZvijezdu(z[0], z[1], z[2]);  // x, y, c
     }
     if (oblikCrtaj == "Triangle" && !trokuti.isEmpty()){
-    float[] t = trokuti.get(trokuti.size() - 1);
-    triangle(t[0], t[1], t[2], t[3], t[4], t[5]);  // x1, y1, x2, y2, x3, y3
+      float[] t = trokuti.get(trokuti.size() - 1);
+      triangle(t[0], t[1], t[2], t[3], t[4], t[5]);  // x1, y1, x2, y2, x3, y3
     }
     if (oblikCrtaj == "Rhombus" && !rombovi.isEmpty()){
-    float[] r = rombovi.get(rombovi.size() - 1);
-    quad(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]);  // x1, y1, x2, y2, x3, y3, x4, y4
+      float[] r = rombovi.get(rombovi.size() - 1);
+      quad(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]);  // x1, y1, x2, y2, x3, y3, x4, y4
     }
     if (oblikCrtaj == "Line" && !linije.isEmpty()){
-    float[] l = linije.get(linije.size() - 1);
-    line(l[0], l[1], l[2], l[3]); // x1, y1, x2, y2
+      float[] l = linije.get(linije.size() - 1);
+      line(l[0], l[1], l[2], l[3]); // x1, y1, x2, y2
     }
     if (oblikCrtaj == "Pentagon" && !peterokuti.isEmpty()){
-    float[] p = peterokuti.get(peterokuti.size() - 1);
-    nacrtajPeterokut(p[0], p[1], p[2]); // x1, y1, r
+      float[] p = peterokuti.get(peterokuti.size() - 1);
+      nacrtajPeterokut(p[0], p[1], p[2]); // x1, y1, r
     }
     if (oblikCrtaj == "MultiStar" && !Zvijezdice.isEmpty()){
-    float[] c = Zvijezdice.get(Zvijezdice.size() - 1);
-    nacrtajZvijezdicu(c[0], c[1], c[2], c[3]); // x1, y1, r
+      float[] c = Zvijezdice.get(Zvijezdice.size() - 1);
+      nacrtajZvijezdicu(c[0], c[1], c[2], c[3]); // x1, y1, r
     }
     if (oblikCrtaj == "SmallStar" && !maleZvijezdice.isEmpty()){
       float[] m = maleZvijezdice.get(maleZvijezdice.size() - 1);
       nacrtajMaluZvijezdu(m[0], m[1], m[2], m[3]); // x, y, r1, r2
-
     }
     if (oblikCrtaj == "ArrowL" && !streliceL.isEmpty()){
-    float[] s = streliceL.get(streliceL.size() - 1);
-    nacrtajStrelicuL(s[0], s[1], s[2], s[3]);
+      float[] s = streliceL.get(streliceL.size() - 1);
+      nacrtajStrelicuL(s[0], s[1], s[2], s[3]);
     }
     if (oblikCrtaj == "ArrowR" && !streliceR.isEmpty()){
-    float[] s = streliceR.get(streliceR.size() - 1);
-    nacrtajStrelicuR(s[0], s[1], s[2], s[3]);
+      float[] s = streliceR.get(streliceR.size() - 1);
+      nacrtajStrelicuR(s[0], s[1], s[2], s[3]);
     }
     if (oblikCrtaj == "ArrowU" && !streliceU.isEmpty()){
-    float[] s = streliceU.get(streliceU.size() - 1);
-    nacrtajStrelicuU(s[0], s[1], s[2], s[3]); 
+      float[] s = streliceU.get(streliceU.size() - 1);
+      nacrtajStrelicuU(s[0], s[1], s[2], s[3]); 
     }
     if (oblikCrtaj == "ArrowD" && !streliceD.isEmpty()){
-    float[] s = streliceD.get(streliceD.size() - 1);
-    nacrtajStrelicuD(s[0], s[1], s[2], s[3]);
+      float[] s = streliceD.get(streliceD.size() - 1);
+      nacrtajStrelicuD(s[0], s[1], s[2], s[3]);
     }
     
-    obrubi();
+    shapesInArea();
     return;
     
   }
 
+//-------- dodavanje oblika u listu ----------------------------
+
   void dodajOblik() {
     if (startX < area.left || startX > area.right || startY < area.up || startY > area.down) return;
+    
       if( mouseHeld == 2  && shape == "Rectangle"){
         mouseHeld = 0;
         float a[] = {startX, startY, endX, endY};
         pravokutnici.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "Circle"){
         mouseHeld = 0;
         float a[] = {uX, uY, udalj};
         krugovi.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "Heart"){
         mouseHeld = 0;
         float a[] = {startX, startY, srceSize};
         srca.add(a);
-  }
+        }
        if( mouseHeld == 2  && shape == "Star"){
         mouseHeld = 0;
         float a[] = {centarX, centarY, Radijus};
         zvijezde.add(a);
-  }
+        }
          if( mouseHeld == 2  && shape == "Triangle"){
         mouseHeld = 0;
         float a[] = {X1, Y1, X2, Y2, X3, Y3};
         trokuti.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "Rhombus"){
         mouseHeld = 0;
         float a[] = { RX1, RY1, RX2, RY2, RX3, RY3, RX4, RY4};
         rombovi.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "Line"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX + startX, endY + startY};
         linije.add(a);
-  }
+        }
        if( mouseHeld == 2  && shape == "Pentagon"){
         mouseHeld = 0;
         float a[] = { centarX, centarY, PRadius};
         peterokuti.add(a);
-  }
+        }
        if( mouseHeld == 2  && shape == "MultiStar"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX, endY};
         Zvijezdice.add(a);
-  }
+        }
        if( mouseHeld == 2  && shape == "SmallStar"){
         mouseHeld = 0;
         float a[] = { centarX, centarY, R1,R2};
         maleZvijezdice.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "OvalRect"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX, endY, 20 };
         obliPravokutnici.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "ArrowL"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX + startX, endY + startY };
         streliceL.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "ArrowR"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX + startX, endY + startY };
         streliceR.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "ArrowU"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX + startX, endY + startY};
         streliceU.add(a);
-  }
+        }
         if( mouseHeld == 2  && shape == "ArrowD"){
         mouseHeld = 0;
         float a[] = { startX, startY, endX + startX, endY + startY};
         streliceD.add(a);
-  }
-  return;
+        }
+         return;
  }
+ 
+ //----------- funkcije crtanja oblika ----------------------
+ 
    void nacrtajSrce(float a, float b, float c){
     //Lijeva strana srca
     beginShape();
@@ -309,9 +308,8 @@ class Oblici{
       rect(x+ (z-x)/4, y, (z-x)/2, (w-y)/2);
   }
   
+ //------------- koordinate press and release ------------------------------
     
-
-
   void mousePressed() {
   startX = mouseX;
   startY = mouseY;
@@ -378,12 +376,13 @@ void mouseReleased() {
   oblici.mouseReleased();
 }
 
-void obrubi(){
-  
-  //------ siva pozadina iscrtavanje nakon svakog oblika ------
+//refresha sivu pozadinu nakon nacrtanog da oblik ne izlazi iz pravokutnika
+
+void shapesInArea(){
   color pozadina = color(203,203,204);
   stroke(pozadina);
   fill(pozadina);
+  
   rect(0, 0, 1050, area.up-2); // gornji
   rect(0, 0, area.left-2, 750 -100); // lijevo
   rect(0, 750 - 198, 1050, 750 -198); // donji

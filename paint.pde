@@ -2,13 +2,13 @@ import controlP5.*; // Koristimo Textfield iz biblioteke controlC5. //<>// //<>/
 import ddf.minim.*; // Koristimo biblioteku Minim za dodavanje zvuka
 
 ControlP5 cp5;
+
 Pencil pencil = new Pencil();
 Can can = new Can();
 Oblici oblici = new Oblici();
 
 PGraphics helpScreen;
-boolean isTyping = false;
-boolean isShape = false;
+boolean isTyping = false, isShape = false;
 
 String tool;
 
@@ -41,11 +41,12 @@ color springGreen = color(0,255,127);    color stateBlue = color(131,111,255);
 
 color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
 
-Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
-Gumb p1, p2, p3, p4, p5, p6, p7, p8;
+Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15; // shapeButtons
+Gumb p1, p2, p3, p4, p5, p6, p7, p8; // toolButtons
 
 
 Gumb he = new Gumb( 70, 90);
+Gumb help = new Gumb(70,90); //
 
 Gumb firstChosenColorButton = new Gumb(0, 595, black);
 Gumb secondChosenColorButton = new Gumb(0, 645, white);
@@ -56,7 +57,7 @@ Gumb pressedShapeButton;
 Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
 
 Grid_ toolGrid = new Grid_(5, 2);
-Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = he,p3 = new Gumb("can"), help,
+Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = he, p3 = new Gumb("can"),
                       p6 = new Gumb("gradientPen"), p7 = new Gumb("eraser"), p4 = new Gumb("shapes"), p8 = new Gumb("photo") };
 
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
@@ -68,12 +69,20 @@ new Gumb(30, 30, 30, 30, lime), new Gumb(30, 30, 30, 30, copper), new Gumb(30, 3
 new Gumb(30, 30, 30, 30, redRed), new Gumb(30, 30, 30, 30, mistyRose), new Gumb(30, 30, 30, 30, hotPink), new Gumb(30, 30, 30, 30, coral),
 new Gumb(30, 30, 30, 30, peachPuff), new Gumb(30, 30, 30, 30, springGreen), new Gumb(30, 30, 30, 30, stateBlue),new Gumb(30, 30, 30, 30, darkPurple),};
 
-Grid_ shapeGrid = new Grid_(5, 3);
+Grid_ shapeGrid = new Grid_(2, 8);
 Gumb[] shapeButtons = { b1 = new Gumb("Line", grey), b2 = new Gumb("Circle", grey), b3 = new Gumb("Rectangle", grey), b4 = new Gumb("Star", grey),
                         b5 = new Gumb("Heart", grey), b6 = new Gumb("Triangle", grey), b7 = new Gumb("Rhombus", grey), b8 = new Gumb("Pentagon",grey),
                         b9 = new Gumb("MultiStar", grey), b10 = new Gumb("SmallStar", grey), b11=  new Gumb("OvalRect", grey), b12 = new Gumb("ArrowL", grey), 
                         b13 = new Gumb("ArrowR", grey), b14 = new Gumb("ArrowU", grey), b15 = new Gumb("ArrowD", grey)
                       };
+
+Grid_ photoGrid = new Grid_(2, 2);
+Gumb houseButton = new Gumb("House");
+Gumb carButton = new Gumb("Car");
+Gumb butterflyButton = new Gumb("Butterfly");
+Gumb catButton = new Gumb("Cat");
+
+Gumb[] photoButtons = {houseButton, carButton, butterflyButton,catButton };
 
 
 class DrawArea {
@@ -83,22 +92,11 @@ class DrawArea {
 
 DrawArea area = new DrawArea();
 
- // .svg slike 
-Grid_ photoGrid = new Grid_(2, 2);
-Gumb houseButton = new Gumb("House");
-Gumb carButton = new Gumb("Car");
-Gumb butterflyButton = new Gumb("Butterfly");
-Gumb catButton = new Gumb("Cat");
-Gumb[] PhotoArray = {houseButton, carButton, butterflyButton,catButton };
-PShape house;
-PShape car;
-PShape butterfly;
-PShape cat;
-boolean photoSelected = false; 
-boolean houseSelected = false;
-boolean carSelected = false;
-boolean butterflySelected=false;
-boolean catSelected=false;
+
+PShape house, car, butterfly, cat;
+
+boolean photoSelected = false, houseSelected = false, carSelected = false ; 
+boolean butterflySelected=false, catSelected=false;
 
  
 void setup() {
@@ -107,12 +105,13 @@ void setup() {
     
     toolGrid.addButtons(toolButtons, 0, 0, 50, 50);
     colorGrid.addButtons(colorButtons, 50, 605, 30, 30);
-    photoGrid.addButtons(PhotoArray,900, 100, 50, 50 );
-    shapeGrid.addButtons(shapeButtons, 870, 100, 50, 50);
+    photoGrid.addButtons(photoButtons,900, 100, 50, 50 );
+    shapeGrid.addButtons(shapeButtons, 200, 5, 45, 45);
     
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
     
+    // ------- random color sliders -----------
     cp5.addSlider("red")
      .setPosition(550, 600)
      .setWidth(200)
@@ -146,6 +145,7 @@ void setup() {
     butterfly=loadShape("butterfly.svg");
     cat=loadShape("cat.svg");
 
+//---------- shape button pictures -----------------------
     b1.dodajSliku ("line.png");         b9.dodajSliku("multiStar.png");
     b2.dodajSliku("circle.png");        b10.dodajSliku("smallStar.png");
     b3.dodajSliku("rectangle.png");     b11.dodajSliku("ovalRect.png");
@@ -155,6 +155,7 @@ void setup() {
     b7.dodajSliku("rhombus.png");       b15.dodajSliku("arrowD.png");
     b8.dodajSliku("pentagon.png");
     
+//----------- tool button pictures -------------------------
     p1.dodajSliku("pen.png");
     p2.dodajSliku("magicPen.png");
     p3.dodajSliku("bucket.png");
@@ -163,6 +164,12 @@ void setup() {
     p6.dodajSliku("gradientPen.png");
     p7.dodajSliku("eraser.png");
     p8.dodajSliku("picture.png");
+    
+ //-------- photo button pictures-------------------------
+   houseButton.dodajSliku("house.png");
+   carButton.dodajSliku("cat.png");
+   butterflyButton.dodajSliku("butterfly.png");
+   catButton.dodajSliku("cat.png");
 
 }
 
@@ -172,37 +179,29 @@ void draw() {
   toolGrid.drawGrid();
   colorGrid.drawGrid();
   
+  // ---- shape grid ( show/hide )---
   if (isShape)
     shapeGrid.drawGrid();
-  else
-  {
+  else{
     fill(pozadina);
     stroke(pozadina);
-    rect(870, 100, 200,300);
+    rect(200, 5, 400, 94);
   }
-
   
-  firstChosenColorButton.nacrtajGumb();
-  secondChosenColorButton.nacrtajGumb();
-  
-  if (isSaveVisible ){
-    Text nameGenImage = new Text(600, 600, "Unesite ime generirane slike");
-    nameGenImage.ispisiText();
-    if (saveImageButton.isVisible) {
-      saveImageButton.nacrtajGumb();
-    }
-      
-    cp5.get(Textfield.class,"generate").hide();
-  }
-
-  if(photoSelected)
- {
+  // --- photo grid ( show/hide )----
+  if(photoSelected){
      photoGrid.drawGrid();
   }
+  else {
+    fill(pozadina);
+    stroke(pozadina);
+    rect(900, 100, 200, 100);
+  }
+  //-----------------------------------
+  
   if( (mousePressed && houseButton.unutar()) || houseSelected){
     houseSelected=true; 
     shape(house, 110, -100);
-    
     }
   if( (mousePressed && carButton.unutar()) || carSelected){
     carSelected=true; 
@@ -216,15 +215,25 @@ void draw() {
     catSelected=true; 
     shape(cat, -100, -100);
   }
+  
+  firstChosenColorButton.nacrtajGumb();
+  secondChosenColorButton.nacrtajGumb();
+  
+  if (isSaveVisible ){
+    Text nameGenImage = new Text(600, 600, "Unesite ime generirane slike");
+    nameGenImage.ispisiText();
+    if (saveImageButton.isVisible) {
+      saveImageButton.nacrtajGumb();
+    }
+    cp5.get(Textfield.class,"generate").hide();
+  }
 
   colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
   fill(colorRect);
   rect(800, 610, 100, 100);
     
-
   useSelectedTool();
   useSelectedShape();
-  
 }
 
 void mouseClicked() {
@@ -269,7 +278,6 @@ void mouseClicked() {
     colorSelection.selectedVisualUpdate();
   }
 
-  
   if (saveImageButton.unutar()){
     print("saved\n");
     PImage generatedImage = get(105, 100, 750, 450);
@@ -285,6 +293,7 @@ void useSelectedTool() {
   if (pressedToolButton == null) return;
   String tool = pressedToolButton.name;
   isShape = false;
+  photoSelected = false;
   switch (tool) {
     case "gradientPen":
       pencil.gradientPen(3, firstChosenColorButton.rectColor, secondChosenColorButton.rectColor, area);
@@ -318,11 +327,9 @@ void useSelectedShape(){
   String tool = pressedToolButton.name;
   if(isShape && tool == "shapes")
   {
-      oblici.drawShape(firstChosenColorButton.rectColor,Shape, area);
+      oblici.drawShape(firstChosenColorButton.rectColor,Shape);
   }
 }
-
-
 
 void keyPressed() {
   if ((key == 's' || key == 'S' )) { // && !isTyping) {
@@ -336,7 +343,6 @@ void keyPressed() {
   // h - help  
   // s - save
 }
-
 
 void setupSaveImageTextfield(){
   generatedImageTextfield = cp5.addTextfield("generate")

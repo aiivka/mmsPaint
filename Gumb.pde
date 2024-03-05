@@ -1,14 +1,14 @@
 class Gumb {
 
   float x = 0, y = 0;
-  float w = 50, h = 50;
+  float w = 45, h = 45;
   float xPom, yPom;
   float textSize = 8;
   color rectColor = color(185, 59, 59); // red
-  color textColor = color(0);
+  color textColor = color(105,105,105);;
   String text = "";
   int lineWidth = 1;
-  int lineColor = greyD;
+  int lineColor = color(105,105,105);//greyD;
   String name = "";
   String imageName = "";
    // flag for ie right part of ui
@@ -123,7 +123,7 @@ class Gumb {
 
    void nacrtajSliku() {
     PImage img = loadImage(imageName);
-    img.resize(50, 50);
+    img.resize(45, 45);
     image(img, x , y );
   }
   
