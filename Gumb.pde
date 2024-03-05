@@ -3,12 +3,12 @@ class Gumb {
   float x = 0, y = 0;
   float w = 50, h = 50;
   float xPom, yPom;
-  float textSize = 12;
+  float textSize = 8;
   color rectColor = color(185, 59, 59); // red
   color textColor = color(0);
   String text = "";
   int lineWidth = 1;
-  int lineColor = 0;
+  int lineColor = greyD;
   String name = "";
   String imageName = "";
    // flag for ie right part of ui
@@ -19,6 +19,13 @@ class Gumb {
   Gumb(String text_) {
     text = text_;
     name = text;
+    textColor = color(185, 59, 59);
+  }
+  Gumb (String text_, color c){
+    text = text_;
+    name = text;
+    rectColor = c;
+    textColor = color(190,190,190);
   }
   Gumb(color rectColor_) {
     rectColor = rectColor_;
@@ -71,6 +78,7 @@ class Gumb {
     stroke(lineColor);
     rect(x, y, w, h);
     fill(color(0)); // defaultna boja teksta
+    fill(textColor);
     textAlign(CENTER, CENTER);
     textSize(textSize);
     text(text, x + w / 2, y + h / 2);
@@ -115,8 +123,8 @@ class Gumb {
 
    void nacrtajSliku() {
     PImage img = loadImage(imageName);
-    img.resize(20, 20);
-    image(img, x + w/2 - 10, y + h/2 - 10);
+    img.resize(50, 50);
+    image(img, x , y );
   }
   
   void dodajSliku(String slika){
