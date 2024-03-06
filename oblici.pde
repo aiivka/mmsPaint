@@ -394,16 +394,6 @@ void shapesInArea(){
     colorGrid.drawGrid();
     firstChosenColorButton.nacrtajGumb();
     secondChosenColorButton.nacrtajGumb();
-    
-      if (isSaveVisible ){
-    Text nameGenImage = new Text(600, 600, "Unesite ime generirane slike");
-    nameGenImage.ispisiText();
-    if (saveImageButton.isVisible) {
-      saveImageButton.nacrtajGumb();
-    }
-      
-    cp5.get(Textfield.class,"generate").hide();
-  }
   
   colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
   fill(colorRect);

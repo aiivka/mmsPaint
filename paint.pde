@@ -15,7 +15,6 @@ String tool;
 
 PFont font;
 int numGenImages = 0;
-Textfield generatedImageTextfield;
 boolean isSaveVisible = false;
 int saveTimeStart, saveTimeStop = millis();
 
@@ -43,12 +42,9 @@ color springGreen = color(0,255,127);    color stateBlue = color(131,111,255);
 color colorRect = color(int(random(255)), int(random(255)), int(random(255)));
 
 Gumb b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15; // shapeButtons
-Gumb p1, p2, p3, p4, p5, p6, p7, p8; // toolButtons
+Gumb p1, p2, p3, p4, p5, p6, p7, p8, p9; // toolButtons
 Gumb s1, s2, s3; //sizeButtons
 Gumb f1, f2, f3; //fontButtons
-
-Gumb he = new Gumb( 70, 90);
-Gumb help = new Gumb(70,90); //
 
 Gumb firstChosenColorButton = new Gumb(0, 595, black);
 Gumb secondChosenColorButton = new Gumb(0, 645, white);
@@ -58,11 +54,9 @@ Gumb pressedShapeButton;
 Gumb pressedSizeButton;
 Gumb pressedFontButton;
 
-Gumb saveImageButton = new Gumb(850,620, 70, 50, "Spremi sliku");
-
 Grid_ toolGrid = new Grid_(5, 2);
 Gumb[] toolButtons= { p1 = new Gumb("pen"), p2 = new Gumb("magicPen"), p5 = new Gumb("text"), p3 = new Gumb("can"),
-                      p6 = new Gumb("gradientPen"), p7 = new Gumb("eraser"), p4 = new Gumb("shapes"), p8 = new Gumb("photo") };
+                      p6 = new Gumb("gradientPen"), p7 = new Gumb("eraser"), p4 = new Gumb("shapes"), p8 = new Gumb("photo"), p9 = new Gumb("spray") };
 
 Grid_ colorGrid = new Grid_(2, 14); // [2][14]
 Gumb[] colorButtons = { new Gumb(30, 30, 30, 30, green), new Gumb(30, 30, 30, 30, grey), new Gumb(30, 30, 30, 30, darkRed), new Gumb(30, 30, 30, 30, red), 
@@ -86,7 +80,6 @@ Gumb[] shapeButtons = { b1 = new Gumb("Line", grey), b2 = new Gumb("Circle", gre
                         b9 = new Gumb("MultiStar", grey), b10 = new Gumb("SmallStar", grey), b11=  new Gumb("OvalRect", grey), b12 = new Gumb("ArrowL", grey), 
                         b13 = new Gumb("ArrowR", grey), b14 = new Gumb("ArrowU", grey), b15 = new Gumb("ArrowD", grey)
                       };
-
 Grid_ photoGrid = new Grid_(2, 2);
 Gumb houseButton = new Gumb("House");
 Gumb carButton = new Gumb("Car");
@@ -95,6 +88,19 @@ Gumb catButton = new Gumb("Cat");
 
 Gumb[] photoButtons = {houseButton, carButton, butterflyButton,catButton };
 
+////image import, export
+Grid_ importExportGrid = new Grid_(1, 2);
+Gumb importButton = new Gumb("Import");
+Gumb exportButton = new Gumb("Export");
+Gumb[] importExportArray = {importButton, exportButton};
+boolean importSelected = false;
+boolean exportSelected = false;
+
+boolean importedImagePositionSelected = false;
+
+PImage loadedImage, resizedImportedImage;
+float resizedImageScale;
+PGraphics generatedImage;
 
 class DrawArea {
   int sizeX = 750, sizeY = 450;
@@ -103,11 +109,16 @@ class DrawArea {
 
 DrawArea area = new DrawArea();
 
-
 PShape house, car, butterfly, cat;
+PShape resizedImportedSVG;
+
+float resizedSVGImageScale;
+boolean SVGImagePositionSelected = false;
 
 boolean photoSelected = false, houseSelected = false, carSelected = false ; 
 boolean butterflySelected=false, catSelected=false;
+
+color pozadina = color(203,203,204);
 
  
 void setup() {
@@ -120,9 +131,11 @@ void setup() {
     shapeGrid.addButtons(shapeButtons, 200, 5, 45, 45);
     sizeGrid.addButtons(sizeButtons, 50, 680, 95, 50);
     fontGrid.addButtons(fontButtons, 620, 20, 95, 115);
+    importExportGrid.addButtons(importExportArray, 900, 0, 50, 50);
     
     cp5 = new ControlP5(this);
     font = loadFont("Hiragino15.vlw");
+    setupScaleSlider();
     
     // ------- random color sliders -----------
     cp5.addSlider("red")
@@ -149,8 +162,6 @@ void setup() {
      .setValue(blue(colorRect))
      .setColorForeground(color(0, 100, 200));
     
-    setupSaveImageTextfield();
-    saveTimeStop = millis();
     colorSelection.selectedVisualUpdate();
     
     house=loadShape("kuca.svg");
@@ -177,10 +188,11 @@ void setup() {
     p6.dodajSliku("gradientPen.png");
     p7.dodajSliku("eraser.png");
     p8.dodajSliku("picture.png");
+    p9.dodajSliku("spray.png");
     
  //-------- photo button pictures-------------------------
    houseButton.dodajSliku("house.png");
-   carButton.dodajSliku("cat.png");
+   carButton.dodajSliku("car.png");
    butterflyButton.dodajSliku("butterfly.png");
    catButton.dodajSliku("cat.png");
  
@@ -194,23 +206,33 @@ void setup() {
    f2.dodajSliku("courier.png");
    f3.dodajSliku("brush.png");
 
-
+ //---------import button pictures
+ importButton.dodajSliku("import.png");
+ exportButton.dodajSliku("export.png");
+ 
+ spray = loadImage("spray.png");
+ generatedImage = createGraphics(750, 450);
 }
 
-void draw() {
-  color pozadina = color(203,203,204);
-
+void draw() { 
   toolGrid.drawGrid();
   colorGrid.drawGrid();
   sizeGrid.drawGrid();
   fontGrid.drawGrid();
+  importExportGrid.drawGrid();
+  
+  if (importedImagesArray != null) {
+    for (Image image : importedImagesArray) {
+      image.drawFromStart();
+    }
+  }
   
   // ---- shape grid ( show/hide )---
   if (isShape)
     shapeGrid.drawGrid();
   else{
     fill(pozadina);
-    stroke(pozadina);
+    stroke(pozadina); 
     rect(200, 5, 400, 94);
   }
   
@@ -227,39 +249,70 @@ void draw() {
   
   if( (mousePressed && houseButton.unutar()) || houseSelected){
     houseSelected=true; 
-    shape(house, 110, -100);
+    float scaleX = 750 / house.width;
+    float scaleY = 450 / house.height;
+    float minScale = min(scaleX, scaleY);
+
+    house.scale(minScale);
+    shape(house, 200, 280);
     }
   if( (mousePressed && carButton.unutar()) || carSelected){
     carSelected=true; 
-    shape(car, 50, -250);
+    float scaleX = 750 / car.width;
+    float scaleY = 450 / car.height;
+    float minScale = min(scaleX, scaleY);
+    
+    car.scale(minScale);
+    shape(car, 300, 200);
   }
-  if( (mousePressed && butterflyButton.unutar()) || butterflySelected){
-    butterflySelected=true; 
-    shape(butterfly, -350, -500);
+  if( (mousePressed && butterflyButton.unutar()) || butterflySelected) {
+    butterflySelected=true;
+    //print("butterfly \n");
+    float scaleX = 750 / butterfly.width;
+    float scaleY = 450 / butterfly.height;
+    float minScale = min(scaleX, scaleY);
+
+    butterfly.scale(minScale);
+    float butterflyWidth = butterfly.width * minScale;
+    float butterflyHeight = butterfly.height * minScale;
+    butterfly.width = butterflyWidth;
+    butterfly.height = butterflyHeight;
+    //float scale = cp5.getController("importedImageScale").getValue();
+         
+    //butterfly.width = butterflyWidth * scale;
+    //butterfly.height = butterflyHeight * scale;
+    //print("prije " + butterfly.width + " h " + butterfly.height);
+    if (resizedImageInsideCanvas(mouseX, mouseY, butterfly.width, butterfly.height)){
+      shape(butterfly, mouseX, mouseY);
+    }
+    //print("NAKON\n"); 
+    shape(butterfly, 20, 10);
+    
+    
   }
   if( (mousePressed && catButton.unutar()) || catSelected){
     catSelected=true; 
-    shape(cat, -100, -100);
+    float scaleX = 750 / cat.width;
+    float scaleY = 450 / cat.height;
+    float minScale = min(scaleX, scaleY);
+
+    cat.scale(minScale);
+    shape(cat, 0, 100);
   }
   
   firstChosenColorButton.nacrtajGumb();
   secondChosenColorButton.nacrtajGumb();
   
-  if (isSaveVisible ){
-    Text nameGenImage = new Text(600, 600, "Unesite ime generirane slike");
-    nameGenImage.ispisiText();
-    if (saveImageButton.isVisible) {
-      saveImageButton.nacrtajGumb();
-    }
-    cp5.get(Textfield.class,"generate").hide();
-  }
-
   colorRect = color(cp5.getController("red").getValue(), cp5.getController("green").getValue(), cp5.getController("blue").getValue());
   fill(colorRect);
   rect(800, 610, 100, 100);
     
   useSelectedTool();
   useSelectedShape();
+  
+  if (generatedImage != null) {
+    image(generatedImage, 105, 100);
+  }
 }
 
 void mouseClicked() {
@@ -326,14 +379,25 @@ void mouseClicked() {
     colorSelection.selectedVisualUpdate();
   }
 
-  if (saveImageButton.unutar()){
-    print("saved\n");
-    PImage generatedImage = get(105, 100, 750, 450);
-    generatedImage.save("screen" + numGenImages + ".png"); // should write user input 
-    generatedImageTextfield.setVisible(false);
-    isTyping = false;
-    isSaveVisible = false;
-    saveImageButton.updateVisibility();
+  if (exportButton.unutar()) {
+    exportSelected = true;
+    selectOutput("Select a file to process:", "fileSelected");
+  }
+  if (importButton.unutar()) {
+    importSelected = true;
+    selectInput("Select a file to process:", "fileSelected");    
+  }
+
+  if(importedImagePositionSelected){
+    float scale = cp5.getController("importedImageScale").getValue();
+    resizedImportedImage.resize(int(resizedImportedImage.width * scale), int(resizedImportedImage.height * scale));
+    
+    if (resizedImageInsideCanvas(mouseX, mouseY, resizedImportedImage.width, resizedImportedImage.height)) {
+      image(resizedImportedImage, mouseX, mouseY);
+      Image img = new Image(resizedImportedImage, mouseX, mouseY);
+      importedImagePositionSelected = false;
+      importedImagesArray.add(img);
+    }
   }
 }
 
@@ -371,8 +435,13 @@ void useSelectedTool() {
       break;
     case "shapes":
       isShape = true;
+      break;
     case "text":
       textBlob.tBlob(firstChosenColorButton.rectColor, velicina, font, area);
+      break;
+    case "spray":
+      drawSprayCircle( mouseX, mouseY, 20, 20);
+      break;
     default:
       break;
   }
@@ -391,30 +460,35 @@ void useSelectedShape(){
 }
 
 void keyPressed() {
-  if ((key == 's' || key == 'S' )) { // && !isTyping) {
-    //isTyping = true;
-    isSaveVisible = true;
-    generatedImageTextfield.setVisible(true);
-    //generatedImageTextfield.hide();
-    //cp5.get(Textfield.class,"generate").hide();
-    //saveImageButton.isVisible = true;
+  if ((key == 's' || key == 'S' )) {
+    importSelected = true;
+    selectInput("Select a file to process:", "fileSelected");
   }
-  // h - help  
-  // s - save
 }
 
-void setupSaveImageTextfield(){
-  generatedImageTextfield = cp5.addTextfield("generate")
-    .setPosition(550, 620)
-    .setSize(250, 70)
-    .setVisible(false)
-    .setColor(color(255,255,204))
-    .setColorActive(color(255,255,204)) 
-    .setColorForeground(color(255))
-    .setColorBackground(color(0))
-    .setFont(font)
-    .setText("screen");
-    
-  // hide caption label
-  generatedImageTextfield.getCaptionLabel().setText("");
+boolean insideCanvas() { //105, 100, 750, 450
+  if ( mouseX >= area.left && mouseX <= area.right
+    && mouseY >= area.up && mouseY <= area.down) {
+    return true;
+  }
+  return false;
+}
+
+boolean resizedImageInsideCanvas(float x, float y, float imageWidth, float imageHeight) {
+  if (x >= area.left && x + imageWidth <= area.right &&
+      y >= area.up && y + imageHeight <= area.down) {
+    return true;
+  }
+  return false;
+}
+
+void setupScaleSlider() {
+  cp5.addSlider("importedImageScale")
+    .setPosition(890, 70)
+    .setWidth(120)
+    .setHeight(20)
+    .setRange(0.1, 1)
+    .setValue(1)
+    .setCaptionLabel("scale")
+    .setColorBackground(black); 
 }
